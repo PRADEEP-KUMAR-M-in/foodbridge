@@ -1,0 +1,1149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b8a3a">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@500;700;800&family=Mukta+Malar:wght@400;600;700&display=swap">
+<title>FOODBRIDGE</title>
+<style>
+
+:root{
+  --disp:"Baloo Thambi 2","Noto Sans Tamil","Nirmala UI",system-ui,sans-serif;
+  --body:"Mukta Malar","Noto Sans Tamil","Nirmala UI",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --bg:#F2F8EF;--card:#fff;--tx:#1B1A2E;--mut:#58566B;--bd:#DCE6D6;
+  --btn:#0B6E4F;--btn-tx:#fff;--link:#0B6E4F;
+  --claim:#FFB000;--claim-tx:#1B1A2E;--claim-sh:#C98600;
+  --ok:#0B6E4F;--amb:#8A5300;--red:#B3162B;
+  --ok-bg:#DDF3E6;--amb-bg:#FFF0CC;--red-bg:#FFE0E3;
+  --ring:#2B2D7E;--h1:#0B6E4F;--h2:#1B5A6E;--h3:#2B2D7E;
+  --cat:#6B6A85;--cat-tx:#4F4E68;--cat-bg:#E8E8F0;
+}
+.c-bakery{--cat:#F0A000;--cat-tx:#8A5300;--cat-bg:#FFF0CC}
+.c-meal{--cat:#D7263D;--cat-tx:#B3162B;--cat-bg:#FFE3E6}
+.c-produce{--cat:#2E9E44;--cat-tx:#1E7A34;--cat-bg:#DDF3E1}
+*{box-sizing:border-box}
+:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+select,input,button{font:inherit}
+[hidden]{display:none!important}
+.chk{display:inline-flex;gap:6px;align-items:center;margin:6px 10px 0 0;font-weight:400}.chk input{width:auto}
+.link{background:none;border:0;color:var(--link);text-decoration:underline;padding:10px 0;font-weight:600;cursor:pointer}
+.warn{border-color:var(--amb);background:var(--amb-bg);color:var(--amb)}
+textarea{width:100%;padding:11px;border:1.5px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font:inherit;resize:vertical}
+.flag{border-color:var(--amb)!important;box-shadow:0 0 0 2px var(--amb)}
+.warnline{color:var(--amb)}
+.qr{width:190px;height:190px;margin:10px auto;background:#fff;padding:6px;border-radius:10px}
+.code{font-family:ui-monospace,Consolas,monospace;font-size:18px;text-align:center;letter-spacing:1px;font-weight:700}
+.center{text-align:center}
+.v-new,.v-pickup,.v-route,.v-passport,.v-undefined{max-width:680px}
+.v-proof{max-width:880px}
+
+/* cards (the boxes) */
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px;margin:12px 0}
+.card[class*=" c-"]{border-left:7px solid var(--cat)}
+.card.dim{opacity:.74}
+.card.warn{border-left-color:var(--amb)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chead{display:flex;align-items:center;gap:12px}
+.cat-art{flex:none;width:54px;height:54px;border-radius:16px;background:var(--cat-bg);color:var(--cat);display:grid;place-items:center}
+.cat-art svg{width:40px;height:40px}
+.ctext{flex:1;min-width:0}
+.ctitle{font:700 20px/1.15 var(--disp)}
+.ctitle::first-letter{text-transform:uppercase}
+html[lang=ta] .ctitle{font-size:17px;line-height:1.3}
+html[lang=ta] .stg{font-size:10.5px}
+.qty{flex:none;text-align:center;line-height:1}
+.qty b{display:block;font:800 30px/1 var(--disp);color:var(--cat-tx)}
+.qty span{font-size:12px;color:var(--mut)}
+h2{font:700 20px/1.2 var(--disp);margin:14px 0 6px}
+.mut{color:var(--mut);font-size:14.5px}
+.badge{font-size:12.5px;padding:2px 10px;border-radius:99px;border:1px solid var(--bd);background:var(--card);white-space:nowrap}
+.badge.ok{display:inline-block;margin-bottom:8px;background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.clock{display:inline-block;padding:0 12px;border-radius:99px;font:700 20px/1.5 var(--disp);font-variant-numeric:tabular-nums}
+.clock.green{background:var(--ok-bg);color:var(--ok)}.clock.amber{background:var(--amb-bg);color:var(--amb)}.clock.red{background:var(--red-bg);color:var(--red)}
+label{display:block;font-weight:700;margin-top:12px}
+input,select.f{width:100%;padding:11px 12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx)}
+
+/* buttons (the tappy things) */
+.btn{display:block;width:100%;margin-top:12px;padding:13px;border:0;border-radius:14px;background:var(--btn);color:var(--btn-tx);font-weight:700;font-size:17px;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.alt{background:transparent;color:var(--link);border:1.5px solid var(--link)}
+.btn.bad{background:var(--red);color:#fff}
+.btn.claim{background:var(--claim);color:var(--claim-tx);font:800 20px/1.2 var(--disp);padding:13px 14px 12px;box-shadow:0 3px 0 var(--claim-sh)}
+.btn.claim:active{transform:translateY(2px);box-shadow:0 1px 0 var(--claim-sh)}
+.btn.sm{display:inline-block;width:auto;padding:8px 14px;margin-top:8px;font-size:15px}
+
+/* proof tiles (the receipts) */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--bd);border-top:5px solid var(--tc,var(--btn));border-radius:14px;padding:10px;text-align:center;font-size:14px}
+.tile:nth-child(4n+2){--tc:#F0A000}.tile:nth-child(4n+3){--tc:#D7263D}.tile:nth-child(4n+4){--tc:#2B2D7E}
+.tile b{display:block;font:800 30px/1.2 var(--disp);color:var(--tx)}
+.ok{color:var(--ok);font-weight:700}.bad{color:var(--red);font-weight:700}
+.toast{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);max-width:560px;margin:0 auto;padding:12px 14px;border-radius:14px;background:#0B6E4F;color:#fff;z-index:9;display:none;font-weight:600}
+.toast.bad{background:#B3162B}
+ul{padding-left:18px;margin:6px 0}
+
+/* stages, little pills, and the route */
+.stages{display:flex;flex-wrap:wrap;gap:3px;margin:10px 0}
+.stg{flex:1 1 auto;text-align:center;white-space:nowrap;font-size:11.5px;padding:6px 5px;border-radius:9px;border:1px solid var(--bd);color:var(--mut)}
+.stg.done{background:var(--btn);border-color:var(--btn);color:var(--btn-tx)}
+.stg.current{border-color:var(--cat-tx,var(--link));color:var(--tx);font-weight:800;box-shadow:0 0 0 2px var(--cat,var(--link)) inset}
+.stg.failed{background:var(--red);border-color:var(--red);color:#fff}
+.stg.skipped{opacity:.45;border-style:dashed}
+.pill{display:inline-block;font-size:12.5px;padding:2px 9px;border-radius:99px;border:1px solid var(--amb);background:var(--amb-bg);color:var(--amb);margin:2px 4px 0 0}
+.pill.red{border-color:var(--red);background:var(--red-bg);color:var(--red)}.pill.green{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}
+.stop{display:flex;gap:10px}.stop .n{flex:none;width:32px;height:32px;border-radius:50%;background:var(--ring);color:var(--card);font:800 17px var(--disp);display:flex;align-items:center;justify-content:center}
+.net{background:#8A5300;color:#fff;font-size:13px;padding:7px 12px;text-align:center}
+.hist{font-size:13px;border-left:3px solid var(--bd);padding-left:10px;margin:8px 0}
+.hist div{margin:4px 0}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px}.tbl td,.tbl th{padding:6px 4px;border-bottom:1px solid var(--bd);text-align:left}
+
+/* big screens: the card lists turn into a grid */
+@media (min-width:760px){
+  .v-feed,.v-mine,.v-claims,.v-live,.v-approve,.v-incidents,.v-fairness{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
+  :is(.v-feed,.v-mine,.v-claims,.v-live,.v-approve,.v-incidents,.v-fairness)>.card{margin:0}
+  :is(.v-feed,.v-mine,.v-claims,.v-live,.v-approve,.v-incidents,.v-fairness)>:not(.card),:is(.v-feed,.v-mine,.v-claims,.v-live,.v-approve,.v-incidents,.v-fairness)>.card.warn{grid-column:1/-1}
+}
+
+/* big-button mode (easier to tap) */
+body.big{font-size:20px}body.big .btn{padding:18px;font-size:20px}body.big nav button{padding:14px 18px;font-size:18px}
+body.big input,body.big select.f,body.big textarea{padding:15px;font-size:20px}body.big .clock{font-size:26px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{header,nav,.note,.toast,.noprint{display:none!important}.card{break-inside:avoid}}
+/* ===== the look, borrowed from foodbridge-1.py ===== */
+:root{--g1:#1b8a3a;--g2:#0e6b5c;--or:#ff8a1f;--pk:#ff4f8b;--bl:#2b7de9;--yl:#ffc933;--pu:#7c4dff;--ink:#1f2a1f;--card:#fff}
+*{box-sizing:border-box}
+html,body{overflow-x:clip}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Tamil",sans-serif;color:var(--ink);
+background:linear-gradient(160deg,#fff7e6 0%,#e8fff0 45%,#e6f3ff 100%);background-attachment:fixed;min-height:100vh}
+a{color:var(--bl)}
+.blobs{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.blobs i{position:absolute;border-radius:50%;filter:blur(40px);opacity:.35;animation:drift 18s ease-in-out infinite}
+.blobs i:nth-child(1){width:320px;height:320px;background:#ffc933;left:-80px;top:10%}
+.blobs i:nth-child(2){width:380px;height:380px;background:#4ccf75;right:-120px;top:35%;animation-delay:-6s}
+.blobs i:nth-child(3){width:300px;height:300px;background:#ff8fb5;left:30%;bottom:-120px;animation-delay:-11s}
+@keyframes drift{50%{transform:translate(40px,-50px) scale(1.15)}}
+header.top{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+padding:10px 16px;background:linear-gradient(90deg,var(--g1),var(--g2));color:#fff;box-shadow:0 3px 14px #0003}
+.brand{font-weight:900;font-size:1.3rem;color:#fff;text-decoration:none;letter-spacing:.5px;display:flex;gap:8px;align-items:center}
+.brand span{display:inline-block;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px) rotate(-8deg)}}
+nav.links{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+nav.links a{color:#fff;text-decoration:none;font-weight:700;padding:7px 12px;border-radius:999px;font-size:.92rem}
+nav.links a:hover{background:#ffffff30}nav.links a.on{background:#fff;color:var(--g1)}
+nav.links a.cta{background:var(--or);color:#fff}
+.note{font-size:.8rem;color:#5a665a;padding:10px 16px;text-align:center}
+main{max-width:1020px;margin:0 auto;padding:6px 14px 50px}
+main.wide{max-width:none;padding:0}
+.card{background:var(--card);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 24px #0f3d1a1c;border:1px solid #eef3ee}
+h1,h2,h3{margin:.2em 0 .5em;line-height:1.15}
+label{display:block;font-weight:700;margin:12px 0 4px}
+input,select,textarea{width:100%;padding:12px;border:2px solid #dfe8df;border-radius:12px;font:inherit;background:#fbfffb}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--g1);box-shadow:0 0 0 4px #1b8a3a22}
+input[type=checkbox],input[type=radio]{width:auto}
+.btn{display:inline-block;border:0;cursor:pointer;padding:12px 20px;border-radius:14px;font:inherit;font-weight:800;color:#fff;text-decoration:none;
+background:linear-gradient(135deg,var(--g1),#27b24f);box-shadow:0 4px 12px #1b8a3a55;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 8px 18px #1b8a3a55}
+.btn.full{width:100%;margin-top:16px;text-align:center}
+.btn.or{background:linear-gradient(135deg,var(--or),#ffb23f);box-shadow:0 4px 12px #ff8a1f55}
+.btn.pk{background:linear-gradient(135deg,var(--pk),#ff7ab0);box-shadow:0 4px 12px #ff4f8b55}
+.btn.bl{background:linear-gradient(135deg,var(--bl),#58a2ff);box-shadow:0 4px 12px #2b7de955}
+.btn.pu{background:linear-gradient(135deg,var(--pu),#a584ff);box-shadow:0 4px 12px #7c4dff55}
+.btn.ghost{background:#fff;color:var(--g1);border:2px solid var(--g1);box-shadow:none}
+.btn.big{padding:16px 30px;font-size:1.15rem}
+.pulse{animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #ff8a1faa}70%{box-shadow:0 0 0 18px #ff8a1f00}100%{box-shadow:0 0 0 0 #ff8a1f00}}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sp{justify-content:space-between}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.grid.sm{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.stat{border-radius:20px;padding:20px 10px;text-align:center;color:#fff;box-shadow:0 8px 20px #0002}
+.stat b{display:block;font-size:2.3rem}.stat span{font-weight:700;font-size:.95rem}
+.s1{background:linear-gradient(135deg,#ff8a1f,#ffb23f)}.s2{background:linear-gradient(135deg,#1b8a3a,#4ccf75)}
+.s3{background:linear-gradient(135deg,#2b7de9,#6bb0ff)}.s4{background:linear-gradient(135deg,#ff4f8b,#ff8fb5)}
+.s5{background:linear-gradient(135deg,#7c4dff,#a584ff)}
+.badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:.78rem;font-weight:800;background:#e3f6e8;color:#12692c;white-space:nowrap}
+.badge.reserved,.badge.pending,.badge.open{background:#fff1d6;color:#a35b00}
+.badge.collected,.badge.completed,.badge.accepted{background:#dff0ff;color:#0f4fa0}
+.badge.expired,.badge.rejected{background:#ffe1e8;color:#a3123c}
+.badge.resolved{background:#e6e6f5;color:#44447a}
+.badge.incident{background:#ffe1e8;color:#a3123c}.badge.complaint{background:#fff1d6;color:#a35b00}
+.vb{display:inline-block;font-size:.75rem;font-weight:800;padding:2px 9px;border-radius:999px}
+.vb.y{background:#dff7e6;color:#0e5a26}.vb.n{background:#fff1d6;color:#a35b00}
+.flash{padding:12px 16px;border-radius:12px;margin:12px 0;font-weight:700;animation:pop .5s}
+.flash.ok{background:#dff7e6;color:#0e5a26}.flash.err{background:#ffe3e3;color:#9b1c1c}
+@keyframes pop{0%{transform:scale(.9);opacity:0}100%{transform:none;opacity:1}}
+.thumb{width:84px;height:84px;object-fit:cover;border-radius:16px;border:3px solid #fff;box-shadow:0 3px 10px #0003;background:#eef}
+.ph{width:84px;height:84px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;background:linear-gradient(135deg,#ffe3b0,#ffd0e0)}
+.item{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start}
+.item .body{flex:1 1 220px}
+.time{font-size:1.4rem;font-weight:900;color:var(--g2);font-variant-numeric:tabular-nums}
+.time.urgent{color:#d6194a;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.45}}
+.muted{color:#5a665a}.small{font-size:.85rem}
+.msg{white-space:pre-wrap;background:#f3fbf5;border-left:5px solid var(--g1);padding:12px;border-radius:10px;font-size:.92rem;word-break:break-word}
+.seg{display:flex;gap:10px;flex-wrap:wrap}
+.seg label{flex:1 1 170px;margin:0;border:2px solid #dfe8df;border-radius:14px;padding:12px;font-weight:700;cursor:pointer;transition:.2s}
+.seg label:hover{border-color:var(--g1);transform:translateY(-2px)}
+.seg input{margin-right:8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chips label{margin:0;font-weight:600;border:2px solid #dfe8df;border-radius:999px;padding:6px 12px}
+.page-title{text-align:center;padding:22px 8px 6px}
+.page-title .big{font-size:2.6rem}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #eef3ee;vertical-align:top;font-size:.92rem}
+.scroll-x{overflow-x:auto}
+/* stuff fades in as you scroll */
+.js .rv{opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s}
+.js .rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+.tilt{transition:transform .2s;will-change:transform}
+.ico{width:28px;height:28px;display:inline-block;vertical-align:middle;flex:none}
+.ico.s{width:20px;height:20px;margin:-3px 6px 0 0}
+.bgfood{position:fixed;bottom:-90px;width:46px;height:46px;opacity:.3;z-index:-1;pointer-events:none;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-125vh) rotate(360deg)}}
+@keyframes marq{to{transform:translateX(-50%)}}
+@keyframes inL{from{opacity:0;transform:translateX(-40px)}}
+@keyframes inR{from{opacity:0;transform:translateX(40px)}}
+@keyframes zoomIn{from{opacity:0;transform:scale(.7)}}
+.brand .ico{width:36px;height:36px;filter:drop-shadow(0 2px 3px #0004)}
+.ribbon{overflow:hidden;white-space:nowrap;background:linear-gradient(90deg,#fff3d6,#ffe1ec,#e0f7e8,#e1efff,#fff3d6);border-bottom:3px solid #ffd27a;padding:6px 0}
+.ribbon div{display:inline-flex;gap:26px;padding-right:26px;animation:marq 60s linear infinite}
+.ribbon .ico{width:34px;height:34px;filter:drop-shadow(0 2px 2px #0002)}
+.ribbon:hover div{animation-play-state:paused}
+.strip{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:16px 0 0}
+.strip .ico{width:46px;height:46px;animation:bob 2.4s ease-in-out infinite;filter:drop-shadow(0 4px 4px #0002)}
+.strip .ico:nth-child(2){animation-delay:-.4s}.strip .ico:nth-child(3){animation-delay:-.8s}
+.strip .ico:nth-child(4){animation-delay:-1.2s}.strip .ico:nth-child(5){animation-delay:-1.6s}.strip .ico:nth-child(6){animation-delay:-2s}
+.page-title .big{display:inline-block;animation:bob 2.6s ease-in-out infinite}
+.burger{display:none;flex-direction:column;gap:5px;background:#ffffff26;border:0;border-radius:12px;padding:10px;cursor:pointer}
+.burger i{display:block;width:22px;height:3px;background:#fff;border-radius:3px;transition:.25s}
+.burger.x i:nth-child(1){transform:translateY(8px) rotate(45deg)}.burger.x i:nth-child(2){opacity:0}.burger.x i:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.js .rv.fl{transform:translateX(-60px)}.js .rv.fr{transform:translateX(60px)}.js .rv.zm{transform:scale(.8)}.js .rv.rt{transform:rotate(-5deg) translateY(30px)}
+.js .rv.fl.in,.js .rv.fr.in,.js .rv.zm.in,.js .rv.rt.in{opacity:1;transform:none}
+.grid>.rv:nth-child(2){transition-delay:.1s}.grid>.rv:nth-child(3){transition-delay:.2s}.grid>.rv:nth-child(4){transition-delay:.3s}
+.grid>.rv:nth-child(5){transition-delay:.4s}.grid>.rv:nth-child(6){transition-delay:.5s}
+.stat{transition:transform .25s}.stat:hover{transform:translateY(-4px) rotate(-1deg)}
+footer a{color:#5a665a}
+.confetti{position:fixed;top:-30px;z-index:99;pointer-events:none;font-size:26px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.8}}
+footer{text-align:center;padding:24px 14px;color:#5a665a;font-size:.85rem}
+@media(max-width:620px){main{padding:4px 10px 40px}.stat b{font-size:1.9rem}.thumb,.ph{width:68px;height:68px}
+ nav.links a{padding:6px 9px;font-size:.85rem}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.js .rv{opacity:1;transform:none}}
+@media(max-width:760px){
+ header.top{padding:8px 12px}.burger{display:flex}
+ nav.links{display:none;width:100%;flex-direction:column;align-items:stretch;padding:6px 0;animation:inL .3s}
+ nav.links.open{display:flex}nav.links a{padding:11px 14px;font-size:1rem;border-radius:12px}
+ .note{font-size:.72rem;padding:8px 12px}.page-title .big{font-size:2rem}h1{font-size:1.6rem}
+ .strip .ico{width:36px;height:36px}.hero .fl.x{display:none}}
+@media(max-width:480px){.card{padding:14px;border-radius:16px}.btn.big{padding:13px 18px;font-size:1rem}.btn{padding:11px 16px}
+ .code{font-size:1.8rem}.ribbon .ico{width:28px;height:28px}input,select,textarea{font-size:16px}}
+@media(min-width:1100px){main{max-width:1180px}.grid{gap:18px}}
+@media(hover:none){.btn:hover,.stat:hover{transform:none}}
+@media (prefers-reduced-motion:reduce){.bgfood{display:none}.js .rv.fl,.js .rv.fr,.js .rv.zm,.js .rv.rt{opacity:1;transform:none}}
+
+.hero{position:relative;text-align:center;padding:54px 16px 30px;color:#fff;overflow:hidden;
+background:linear-gradient(135deg,#1b8a3a,#0e6b5c 55%,#2b7de9)}
+.hero h1{font-size:clamp(2rem,6vw,3.6rem);margin:.1em 0}
+.hero p{font-size:1.15rem;max-width:620px;margin:10px auto 22px;opacity:.95}
+.hero .fl{position:absolute;font-size:2.4rem;animation:float 7s ease-in-out infinite;opacity:.85}
+@keyframes float{50%{transform:translateY(-22px) rotate(12deg)}}
+.hero .fl .ico{width:62px;height:62px;filter:drop-shadow(0 6px 6px #0004)}
+.fd .ico{width:48px;height:48px}.marq .ico{width:44px;height:44px;margin:0 14px}
+.wave{display:block;width:100%;height:60px;margin-top:-1px}
+.sec{max-width:1020px;margin:0 auto;padding:40px 14px}
+.sec h2{text-align:center;font-size:clamp(1.5rem,4vw,2.2rem)}
+#story{height:420vh;position:relative;overflow-x:clip}
+#story .sticky{position:sticky;top:60px;height:calc(100vh - 60px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 10px}
+#story h2{margin:0 0 6px;text-align:center}
+#stage{position:relative;width:min(560px,94vw);height:min(430px,62vh);margin:6px auto 0}
+.fd{position:absolute;left:0;top:0;width:48px;height:48px;font-size:42px;line-height:48px;text-align:center;opacity:0;will-change:transform;z-index:2}
+.bowl{position:absolute;left:7%;bottom:0;width:86%;height:auto;pointer-events:none}
+.bowl.bb{z-index:1}.bowl.bf{z-index:3;filter:drop-shadow(0 12px 14px #0003)}
+.bowl.wob{animation:wob .45s}
+@keyframes wob{30%{transform:translateY(8px) scaleY(.96)}60%{transform:translateY(-4px)}}
+.bcap{text-align:center;margin-top:12px;font-weight:800;font-size:1.15rem;min-height:1.6em}
+.bcap b{font-size:1.8rem;color:var(--or)}
+.hint{text-align:center;color:#ffffffd0;font-weight:700;animation:bob 1.6s infinite}
+.step{text-align:center;padding:22px 14px}.step .ic{font-size:3rem;display:inline-block;animation:bob 3s ease-in-out infinite}
+.step:nth-child(2) .ic{animation-delay:-.7s}.step:nth-child(3) .ic{animation-delay:-1.4s}.step:nth-child(4) .ic{animation-delay:-2.1s}
+.num{display:inline-flex;width:30px;height:30px;border-radius:50%;background:var(--or);color:#fff;font-weight:900;align-items:center;justify-content:center}
+.bigstat{text-align:center;padding:26px 12px;border-radius:22px;color:#fff;box-shadow:0 10px 26px #0002}
+.bigstat b{display:block;font-size:clamp(2.2rem,6vw,3.2rem)}
+.marq{overflow:hidden;white-space:nowrap;padding:14px 0;background:#fff;border-block:2px dashed #ffd9a8;font-size:2.2rem}
+.marq div{display:inline-block;animation:marq 24s linear infinite}
+@keyframes marq{to{transform:translateX(-50%)}}
+.role{text-align:center}.role .big{font-size:3.2rem}
+.cta-band{margin:30px auto;max-width:1020px;border-radius:26px;padding:40px 18px;text-align:center;color:#fff;background:linear-gradient(135deg,#ff8a1f,#ff4f8b)}
+:root{color-scheme:light;--btn:#1b8a3a;--link:#1b8a3a;--ring:#7c4dff;--ok:#12692c;--amb:#a35b00;--red:#a3123c;--ok-bg:#dff7e6;--amb-bg:#fff1d6;--red-bg:#ffe1e8;--bd:#dfe8df;--mut:#5a665a;--tx:#1f2a1f}
+body{font:17px/1.5 var(--body);padding-bottom:env(safe-area-inset-bottom,0)}
+h1,h2,h3,.ctitle{font-family:var(--disp)}
+header.top{padding-top:calc(env(safe-area-inset-top,0px) + 10px)}
+nav.links button{color:#fff;background:transparent;border:0;font:inherit;font-weight:700;padding:7px 12px;border-radius:999px;font-size:.92rem;cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap}
+nav.links button:hover{background:#ffffff30}nav.links button.on{background:#fff;color:var(--g1)}nav.links button.cta{background:var(--or)}
+nav.links button.ol{border:2px solid #ffffff80;padding:5px 11px}
+.who{font-size:.8rem;opacity:.92;max-width:16ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.who:empty{display:none}
+header :focus-visible{outline-color:#fff}
+.note{max-width:1120px;margin:0 auto}
+.net{background:#a35b00;color:#fff;font-size:13px;padding:7px 12px;text-align:center}
+.row{justify-content:space-between}
+.btn{display:block;width:100%;margin-top:12px;text-align:center;font-size:17px}
+a.btn,.btn.big{display:inline-block;width:auto;margin-top:0}
+.btn.sm{display:inline-block;width:auto;padding:8px 14px;margin:8px 6px 0 0;font-size:15px;border-radius:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn.alt{background:#fff;color:var(--g1);border:2px solid var(--g1);box-shadow:none}
+.btn.bad{background:linear-gradient(135deg,var(--pk),#ff7ab0);box-shadow:0 4px 12px #ff4f8b55;color:#fff}
+.btn.claim{background:linear-gradient(135deg,var(--or),#ffb23f);box-shadow:0 4px 12px #ff8a1f55;color:#fff;font:800 20px/1.2 var(--disp);padding:14px;animation:pulse 2s infinite}
+.link{background:none;border:0;color:var(--g1);text-decoration:underline;padding:10px 0;font-weight:700;cursor:pointer}
+.cat-art{background:linear-gradient(135deg,#ffe3b0,#ffd0e0);border-radius:16px;width:60px;height:60px}.cat-art .ico{width:42px;height:42px}
+.tile{background:var(--tg,linear-gradient(135deg,#1b8a3a,#4ccf75));color:#fff;border:0;border-radius:20px;padding:18px 8px;box-shadow:0 8px 20px #0002;font-weight:700;transition:transform .25s}
+.tile:nth-child(5n+1){--tg:linear-gradient(135deg,#ff8a1f,#ffb23f)}.tile:nth-child(5n+3){--tg:linear-gradient(135deg,#2b7de9,#6bb0ff)}
+.tile:nth-child(5n+4){--tg:linear-gradient(135deg,#ff4f8b,#ff8fb5)}.tile:nth-child(5n+5){--tg:linear-gradient(135deg,#7c4dff,#a584ff)}
+.tile:hover{transform:translateY(-4px) rotate(-1deg)}.tile b{color:#fff;font-size:2.2rem}
+.tiles{margin:10px 0}
+.v-auth .authcard{max-width:520px;margin:14px auto}
+.chk{border:2px solid var(--bd);border-radius:999px;padding:5px 12px;font-weight:600;margin:6px 6px 0 0}
+.stg.done{background:linear-gradient(135deg,var(--g1),#27b24f);border-color:transparent}
+.stg.current{box-shadow:0 0 0 2px var(--or) inset;border-color:var(--or)}
+.toast{background:var(--g1)}.toast.bad{background:var(--red)}
+.page-title h1{font-size:clamp(1.6rem,5vw,2.3rem)}
+.strip{padding:6px 0 10px}
+.hero{border-radius:0}
+.hero .btn{margin-top:0}
+.tbl td,.tbl th{border-bottom:1px solid #eef3ee}
+body.big{font-size:20px}
+
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-logo" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#fff"/><path d="M8 38h48c0 12-10 20-24 20S8 50 8 38z" fill="#ff8a1f"/><path d="M12 38c2-12 12-16 20-16s18 4 20 16z" fill="#4ccf75"/><circle cx="24" cy="31" r="4" fill="#ff3d4a"/><circle cx="35" cy="27" r="4" fill="#ffd23f"/><circle cx="44" cy="33" r="3" fill="#ff8a1f"/></symbol>
+<symbol id="i-bread" viewBox="0 0 64 64"><path d="M10 28c-4-10 6-18 22-18s26 8 22 18c-1 3-3 4-5 4v18c0 3-2 5-5 5H20c-3 0-5-2-5-5V32c-2 0-4-1-5-4z" fill="#e8a65a"/><path d="M20 20l6 8M30 18l6 9M40 20l6 8" stroke="#b9702a" stroke-width="3" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="i-carrot" viewBox="0 0 64 64"><path d="M32 18c8 0 12 6 10 14L36 58c-1 2-4 2-4 0L26 32c-2-8 2-14 6-14z" fill="#ff8a1f"/><path d="M28 30h6M29 40h4" stroke="#d96a00" stroke-width="2.5" stroke-linecap="round"/><path d="M32 18c-4-6-8-8-10-8 0 4 4 8 10 8zM32 18c0-7 2-11 5-13 1 4-1 9-5 13zM32 18c4-4 8-5 12-4-2 4-6 6-12 4z" fill="#2fa84f"/></symbol>
+<symbol id="i-apple" viewBox="0 0 64 64"><path d="M32 22c-5-6-18-4-18 11 0 12 8 24 15 24 2 0 2-1 3-1s1 1 3 1c7 0 15-12 15-24 0-15-13-17-18-11z" fill="#ff3d4a"/><path d="M32 22c0-6 2-10 6-12" stroke="#6b3e1b" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M36 12c4-4 10-3 12 0-4 3-9 3-12 0z" fill="#2fa84f"/><path d="M20 32c0-4 2-6 5-7" stroke="#fff" stroke-opacity=".6" stroke-width="3" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="i-rice" viewBox="0 0 64 64"><path d="M6 32h52c0 14-10 24-26 24S6 46 6 32z" fill="#ff4f8b"/><path d="M12 32c2-12 12-16 20-16s18 4 20 16z" fill="#fff"/><g fill="#e2e2e2"><circle cx="24" cy="26" r="2"/><circle cx="32" cy="22" r="2"/><circle cx="40" cy="27" r="2"/><circle cx="30" cy="29" r="2"/></g><path d="M42 4L32 24M48 6L36 26" stroke="#8a5a2b" stroke-width="2.5" stroke-linecap="round"/></symbol>
+<symbol id="i-milk" viewBox="0 0 64 64"><path d="M20 22l12-10 12 10v34H20z" fill="#fff" stroke="#2b7de9" stroke-width="3" stroke-linejoin="round"/><rect x="20" y="32" width="24" height="14" fill="#2b7de9"/><path d="M20 22h24" stroke="#2b7de9" stroke-width="3"/><circle cx="32" cy="39" r="4" fill="#fff"/></symbol>
+<symbol id="i-banana" viewBox="0 0 64 64"><path d="M12 18c4 22 18 34 40 30-2 6-10 12-22 10C14 55 6 36 12 18z" fill="#ffd23f"/><path d="M12 18c-1-4 1-8 4-10l2 8z" fill="#8a6a1b"/><path d="M18 26c4 14 12 22 24 24" stroke="#e0a800" stroke-width="2.5" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="i-tomato" viewBox="0 0 64 64"><circle cx="32" cy="36" r="22" fill="#f0392d"/><path d="M32 14l4 8 8-4-3 8 8 2-8 4-9-2-9 2-8-4 8-2-3-8 8 4z" fill="#2fa84f"/><path d="M20 34c0-5 3-8 6-9" stroke="#fff" stroke-opacity=".5" stroke-width="3" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="i-orange" viewBox="0 0 64 64"><circle cx="32" cy="36" r="22" fill="#ff9f1c"/><path d="M32 14c0-5 3-8 8-8 0 5-3 8-8 8z" fill="#2fa84f"/><path d="M20 30c2-4 5-6 8-6" stroke="#fff" stroke-opacity=".5" stroke-width="3" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="i-cake" viewBox="0 0 64 64"><path d="M14 32h36l-5 24H19z" fill="#ff8fb5"/><path d="M12 32c0-12 8-18 20-18s20 6 20 18z" fill="#fff2d6"/><path d="M22 32v14M32 32v18M42 32v14" stroke="#ff5f9a" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="10" r="4.5" fill="#ff3d4a"/></symbol>
+</defs></svg><div class="blobs"><i></i><i></i><i></i></div><svg class="bgfood" style="left:4%;animation-duration:19s;animation-delay:0s"><use href="#i-bread"/></svg><svg class="bgfood" style="left:14%;animation-duration:24s;animation-delay:-7s"><use href="#i-apple"/></svg><svg class="bgfood" style="left:27%;animation-duration:21s;animation-delay:-3s"><use href="#i-carrot"/></svg><svg class="bgfood" style="left:38%;animation-duration:26s;animation-delay:-12s"><use href="#i-rice"/></svg><svg class="bgfood" style="left:50%;animation-duration:20s;animation-delay:-5s"><use href="#i-milk"/></svg><svg class="bgfood" style="left:62%;animation-duration:25s;animation-delay:-9s"><use href="#i-banana"/></svg><svg class="bgfood" style="left:73%;animation-duration:22s;animation-delay:-2s"><use href="#i-tomato"/></svg><svg class="bgfood" style="left:84%;animation-duration:27s;animation-delay:-14s"><use href="#i-orange"/></svg><svg class="bgfood" style="left:92%;animation-duration:23s;animation-delay:-6s"><use href="#i-cake"/></svg>
+<header class="top"><a class="brand" href="#" id="brand"><span><svg class="ico"><use href="#i-logo"/></svg></span>FOODBRIDGE</a>
+<button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>
+<nav class="links" id="nav"><span id="tabs" style="display:contents"></span><span class="who" id="who"></span><button class="ol" id="big" aria-label="Large buttons">A+</button><button class="ol" id="lang"></button><button id="out" hidden></button></nav></header>
+<div class="ribbon" aria-hidden="true"><div><svg class="ico"><use href="#i-bread"/></svg><svg class="ico"><use href="#i-carrot"/></svg><svg class="ico"><use href="#i-apple"/></svg><svg class="ico"><use href="#i-rice"/></svg><svg class="ico"><use href="#i-milk"/></svg><svg class="ico"><use href="#i-banana"/></svg><svg class="ico"><use href="#i-cake"/></svg><svg class="ico"><use href="#i-tomato"/></svg><svg class="ico"><use href="#i-orange"/></svg><svg class="ico"><use href="#i-bread"/></svg><svg class="ico"><use href="#i-carrot"/></svg><svg class="ico"><use href="#i-apple"/></svg><svg class="ico"><use href="#i-rice"/></svg><svg class="ico"><use href="#i-milk"/></svg><svg class="ico"><use href="#i-banana"/></svg><svg class="ico"><use href="#i-cake"/></svg><svg class="ico"><use href="#i-tomato"/></svg><svg class="ico"><use href="#i-orange"/></svg><svg class="ico"><use href="#i-bread"/></svg><svg class="ico"><use href="#i-carrot"/></svg><svg class="ico"><use href="#i-apple"/></svg><svg class="ico"><use href="#i-rice"/></svg><svg class="ico"><use href="#i-milk"/></svg><svg class="ico"><use href="#i-banana"/></svg><svg class="ico"><use href="#i-cake"/></svg><svg class="ico"><use href="#i-tomato"/></svg><svg class="ico"><use href="#i-orange"/></svg><svg class="ico"><use href="#i-bread"/></svg><svg class="ico"><use href="#i-carrot"/></svg><svg class="ico"><use href="#i-apple"/></svg><svg class="ico"><use href="#i-rice"/></svg><svg class="ico"><use href="#i-milk"/></svg><svg class="ico"><use href="#i-banana"/></svg><svg class="ico"><use href="#i-cake"/></svg><svg class="ico"><use href="#i-tomato"/></svg><svg class="ico"><use href="#i-orange"/></svg><svg class="ico"><use href="#i-bread"/></svg><svg class="ico"><use href="#i-carrot"/></svg><svg class="ico"><use href="#i-apple"/></svg><svg class="ico"><use href="#i-rice"/></svg><svg class="ico"><use href="#i-milk"/></svg><svg class="ico"><use href="#i-banana"/></svg><svg class="ico"><use href="#i-cake"/></svg><svg class="ico"><use href="#i-tomato"/></svg><svg class="ico"><use href="#i-orange"/></svg><svg class="ico"><use href="#i-bread"/></svg><svg class="ico"><use href="#i-carrot"/></svg><svg class="ico"><use href="#i-apple"/></svg><svg class="ico"><use href="#i-rice"/></svg><svg class="ico"><use href="#i-milk"/></svg><svg class="ico"><use href="#i-banana"/></svg><svg class="ico"><use href="#i-cake"/></svg><svg class="ico"><use href="#i-tomato"/></svg><svg class="ico"><use href="#i-orange"/></svg><svg class="ico"><use href="#i-bread"/></svg><svg class="ico"><use href="#i-carrot"/></svg><svg class="ico"><use href="#i-apple"/></svg><svg class="ico"><use href="#i-rice"/></svg><svg class="ico"><use href="#i-milk"/></svg><svg class="ico"><use href="#i-banana"/></svg><svg class="ico"><use href="#i-cake"/></svg><svg class="ico"><use href="#i-tomato"/></svg><svg class="ico"><use href="#i-orange"/></svg><svg class="ico"><use href="#i-bread"/></svg><svg class="ico"><use href="#i-carrot"/></svg><svg class="ico"><use href="#i-apple"/></svg><svg class="ico"><use href="#i-rice"/></svg><svg class="ico"><use href="#i-milk"/></svg><svg class="ico"><use href="#i-banana"/></svg><svg class="ico"><use href="#i-cake"/></svg><svg class="ico"><use href="#i-tomato"/></svg><svg class="ico"><use href="#i-orange"/></svg></div></div>
+<div class="net" id="net" hidden></div>
+<div class="note" id="safety"></div>
+<main id="view"></main>
+<div class="toast" id="toast" role="status"></div>
+<script>
+document.documentElement.classList.add('js');
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const S = {rules: [], me: null, token: null, tab: null, lang: 'en', offset: 0, mode: 'home'};
+try { S.lang = localStorage.getItem('fb_lang') || 'en'; S.token = localStorage.getItem('fb_token') || null; } catch (e) {}
+
+// heads up: the Tamil text needs a native speaker to check it before any real use.
+const I18N = {
+ en: {newListing:'New listing', myListings:'My listings', feed:'Available food', myClaims:'My claims', proof:'Proof', approvals:'Approvals',
+  safety:'Coordination tool only. It does not certify that food is safe. Inspect before accepting; refusing is always allowed.',
+  type:'Food type and storage', quantity:'Quantity (packs)', packedAgo:'Packed how many minutes ago?', collectWithin:'Collect within how many minutes?',
+  publish:'Publish listing', seeMatches:'See matches', ranked:'Recommended recipients', excluded:'Not eligible', score:'score', eta:'min away',
+  claim:'Claim', timeLeft:'Time left', closed:'Closed', nothing:'Nothing here yet.', accept:'Accept delivery', refuse:'Refuse', reason:'Reason for refusing',
+  acceptedQty:'Accepted quantity', verify:'Verify chain', listed:'Units listed', collected:'Units collected', done:'Handovers completed', refused:'Handovers refused',
+  chainOk:'Chain intact', chainBad:'Chain BROKEN at event', checked:'events checked', simLink:'Simulator: what could change? (a model, not real results)', proofNote:'Numbers are recomputed from the event trail. The chain is tamper-evident, not tamper-proof.',
+  published:'published', reserved:'reserved', collected_s:'collected', rejected:'refused', expired:'expired', completed:'completed',
+  publishedOk:'Listing published', claimedOk:'Claimed. Confirm at pickup.', handedOk:'Handover recorded',
+  STORAGE_REQUIREMENT_NOT_MET:'Required storage not available', CATEGORY_NOT_ACCEPTED:'Does not accept this category', CAPACITY_EXCEEDED:'Not enough capacity',
+  CANNOT_ARRIVE_IN_SAFE_WINDOW:'Cannot arrive within the safe window', NOT_VERIFIED_OR_INACTIVE:'Not verified or inactive', claimExpires:'Claim expires in',
+  login:'Log in', logout:'Log out', register:'Register your organisation', username:'Username', password:'Password (8+ characters)', orgName:'Organisation name',
+  role:'I am a', donor:'Food donor', recipient:'Receiving organisation', capacity:'How many packs can you take per day?', categories:'Food types you accept', storages:'Storage you have',
+  lat:'Latitude', lon:'Longitude', useLoc:'Use my location', haveAcct:'Already registered? Log in', registeredOk:'Registered. An admin must approve you before you can act. You can log in now.',
+  pending:'Awaiting admin approval. You can look around, but cannot publish or claim until verified.', pendingList:'Waiting for approval', verifiedList:'Verified', approve:'Approve',
+  noPending:'No organisations waiting.',
+  speakTitle:'Speak or type your listing', speakHint:'e.g. 20 packs of bread, packed at 6 pm, collect before 8 pm, room temperature', speak:'Speak', fillForm:'Fill the form',
+  understood:'Understood', notFound:'Not found (please fill in)', engineNote:'Filled by simple rules, not AI. Check every field.',
+  confirmSafety:'I confirm the food type, storage and packed time above are correct.', chooseType:'Please choose the food type and storage.',
+  fCategory:'Food type', fStorage:'Storage', fPacked:'Packed (minutes ago)', fCollect:'Collect within (minutes)',
+  micUnsupported:'Voice input is not supported in this browser. Type instead.', listening:'Listening…', micDenied:'Microphone blocked. Allow it, and use HTTPS or localhost.', micError:'Microphone error:',
+  note_MIXED_CATEGORIES:'Different food types found in one sentence. Please make separate listings.', note_CONFLICTING_STORAGE:'More than one storage type mentioned. Please choose the correct one.',
+  note_UNIT_NOT_PACKS:'Quantity is not in packs; it is used as a unit count. Please check it.', note_DEADLINE_PASSED:'The collection time you said has already passed or is unclear. Please check it.',
+  note_AMBIGUOUS_CLOCK:'A clock time had no am/pm, so the nearest likely time was used. Please check it.', note_COMBO_NOT_ACCEPTED:'This food type and storage combination is not accepted yet.',
+  pickup:'Pickups', incidents:'Incidents', fairness:'Fairness', verifyPickupTitle:'Verify a pickup code', enterCode:'Code shown by the receiving organisation', verifyBtn:'Verify code',
+  scan:'Scan QR code', scanUnsupported:'QR scanning is not supported in this browser. Type the code instead.', pickupVerified:'Pickup verified', showCode:'Show this code to the donor.',
+  mustVerifyFirst:'Waiting for the donor to verify your code. You can accept the delivery after that.', verifiedMsg:'Verified. They can now accept the delivery in their app.',
+  reportProblem:'Report a problem', problemPrompt:'Describe the problem. The listing will be frozen until an admin reviews it.', reportedOk:'Reported. An admin will review it.',
+  release:'Release', discard:'Discard', resolveNote:'Note about your decision (optional)', resolvedOk:'Incident resolved.', noIncidents:'No incidents.',
+  offeredYou:'Offered to you first', offeredOther:'Offered to another organisation first. Opens to everyone in', offeredTo:'Offered first to', offerEnds:'First dibs end in', claimedBy:'Claimed by',
+  frozen:'frozen', discarded:'discarded', closed:'closed', uncollected:'Units not collected', incidentsTile:'Incidents reported',
+  fOffers:'offers', fClaims:'claims', fDone:'completed', fExpired:'expired', fRefused:'refused', fUnits:'units', fShare:'share of collected', concentration:'One organisation received more than half of everything collected. Check whether the matching is fair.', fairNote:'Offers show who is given first dibs. Shares are of verified collected units.',
+  open:'open', resolved:'resolved', reporter:'Reported by',
+  live:'Live', route:'Rescue plan', passport:'Passport', back:'Back', print:'Print / save as PDF',
+  stg_listed:'Listed', stg_offered:'Offered', stg_claimed:'Claimed', stg_pickup:'Pickup', stg_handover:'Handed over',
+  risk_WINDOW_CLOSING:'Safe window closing soon', risk_CLAIM_EXPIRING:'Claim about to lapse', risk_NO_TAKER_YET:'No taker yet',
+  out_success:'Rescued', out_failed:'Not rescued', out_on_hold:'On hold: incident review', out_in_progress:'In progress',
+  why_NO_TAKER_BEFORE_DEADLINE:'No organisation collected it before the safe window closed', why_REFUSED_AT_HANDOVER:'Refused at handover',
+  why_DISCARDED_AFTER_INCIDENT:'Discarded after an incident review', why_HANDOVER_CONFIRMED:'Handover confirmed',
+  liveNote:'Updates every 5 seconds. Stages come from the recorded event trail.', offersMade:'offers made', claimsLapsed:'claims lapsed',
+  planTitle:'Your rescue plan', vehicleCap:'Vehicle capacity (packs)', replan:'Re-plan', planUnits:'packs in this route', planMins:'min total',
+  nextStop:'Next stop', backupPlan:'Backup if the first stop falls through', claimNext:'Claim this stop', claimedAlready:'Already claimed by you',
+  onlyYou:'Only you can rescue this', urgent:'Urgent', legMin:'min drive', arriveIn:'arrive in', slack:'spare', noPlan:'Nothing can be collected right now with this capacity.',
+  skippedTitle:'Left out of the plan', sk_WOULD_MISS_DEADLINE:'You could not arrive in time', sk_EXCEEDS_VEHICLE_CAPACITY:'Too big for the vehicle',
+  sk_BETTER_ROUTE_USES_THE_TIME_OR_SPACE:'A better route uses the time or space', sk_NOT_CONSIDERED_TOO_MANY_OPTIONS:'Too many options; not considered',
+  assumptions:'Assumptions', claimTip:'Claim only the next stop; a claim lapses 15 minutes after it is made.', stops:'stops',
+  declaration:'Ingredients / allergen note (your own declaration)', declPh:'e.g. contains wheat and milk; sealed packs',
+  passTitle:'Food traceability passport', passDonor:'Donor', passFood:'Food record', passPacked:'Packed', passDeadline:'Donor deadline', passLatest:'Latest collection',
+  passDecl:'Donor declaration', passNone:'none given', passHistory:'Handling history', passIncidents:'Incident reports', passRefusals:'Recipient refusals',
+  passIntegrity:'Record integrity', passScan:'Scan to open this record (login required)',
+  ev_DONATION_PUBLISHED:'Listed by donor', ev_OFFER_MADE:'Offered first to an organisation', ev_OFFER_OPEN_TO_ALL:'Opened to all organisations', ev_CLAIM_RESERVED:'Claimed',
+  ev_CLAIM_EXPIRED:'Claim lapsed', ev_PICKUP_VERIFIED:'Pickup code verified by donor', ev_HANDOVER_COMPLETED:'Handover accepted', ev_HANDOVER_REFUSED:'Handover refused',
+  ev_DONATION_EXPIRED:'Safe window closed, not collected', ev_DONATION_DISCARDED:'Discarded', ev_INCIDENT_REPORTED:'Problem reported', ev_INCIDENT_RESOLVED:'Problem resolved',
+  pCompletion:'Completion rate', pToCollect:'Avg minutes, listing to collection', pToClaim:'Avg minutes, listing to first claim', pLapsed:'Claims lapsed',
+  pReasons:'Why food was not collected', pRefusal:'Refusal reasons', pCategory:'By food type', pPeople:'Participating organisations',
+  pDonors:'donors', pRecips:'recipients', pActive:'recipients with a completed handover', pNone:'No data yet',
+  rd:'Read aloud', noVoice:'No voice for this language is installed on this device.',
+  offlineBanner:'You are offline. Showing the last update at', offlineNote:'Claims and handovers need a connection. If this lasts, phone your coordinator.',
+  draftSaved:'Draft saved on this phone', pendingTitle:'Listing not sent yet', sendNow:'Send now', droppedStale:'Saved listing was not sent: its safe window has closed.',
+  sentOk:'Saved listing sent', bigMode:'Large buttons', packs:'packs',
+  heroH:'Surplus food to hungry plates, before the clock runs out.',
+  heroSub:'Bakeries and kitchens list what they cannot sell. Shelters and community kitchens nearby claim it inside its safe window.',
+  cat_packaged_bakery:'packaged bakery', cat_cooked_meal:'cooked meal', cat_fresh_produce:'fresh produce',
+  "passDisclaimer": "This passport records what was declared and what happened. It does not certify that the food is safe; eligibility rules need review by a qualified food-safety professional.",
+  "stor_ambient": "room temperature",
+  "stor_chilled": "chilled",
+  "stor_hot_held": "kept hot",
+  "rs_CATEGORY_ACCEPTED": "accepts this category",
+  "rs_STORAGE_COMPATIBLE": "has compatible storage",
+  "rs_CAPACITY_AVAILABLE": "has declared capacity",
+  "rs_ARRIVES_WITH_TIME_TO_SPARE": "can arrive within the safe window",
+  "rs_FAIR_SHARE_ROTATION": "has been served less recently",
+  "explainLead": "Recommended because it",
+  "explainNote": "This is a coordination recommendation, not a certification that the food is safe.",
+  "sessionExpired": "Session expired. Please log in again.",
+  "locUnavailable": "Location unavailable. Type the coordinates.",
+  "why_INCIDENT_REVIEW": "Incident under review",
+  "methodNote": "Units are exactly what donors listed (packs or items). No meal or emissions estimates are made, because unit sizes are not recorded; any such estimate would need disclosed assumptions and uncertainty.",
+  "assumpText": "{v} km/h, {m} min per stop, straight-line distance (real roads will be longer)",
+  "minWord": "min",
+  "roleLbl_donor": "donor",
+  "roleLbl_recipient": "recipient",
+  "roleLbl_admin": "admin"
+},
+ ta: {newListing:'புதிய பதிவு', myListings:'என் பதிவுகள்', feed:'கிடைக்கும் உணவு', myClaims:'என் கோரிக்கைகள்', proof:'சான்று', approvals:'அனுமதிகள்',
+  safety:'இது ஒருங்கிணைப்புக் கருவி மட்டுமே; உணவு பாதுகாப்பானது என்று சான்றளிக்காது. ஏற்கும் முன் பரிசோதிக்கவும்; மறுக்க எப்போதும் உரிமை உண்டு.',
+  quantity:'அளவு (பொதிகள்)', publish:'வெளியிடு', seeMatches:'பொருத்தங்களைப் பார்', claim:'கோருங்கள்', timeLeft:'மீதம்', closed:'முடிந்தது',
+  nothing:'இன்னும் எதுவும் இல்லை.', accept:'ஏற்கிறோம்', refuse:'மறுக்கிறோம்', reason:'மறுப்பதற்கான காரணம்', verify:'சங்கிலியைச் சரிபார்',
+  published:'வெளியிடப்பட்டது', reserved:'ஒதுக்கப்பட்டது', collected_s:'பெறப்பட்டது', rejected:'மறுக்கப்பட்டது', expired:'காலாவதி',
+  STORAGE_REQUIREMENT_NOT_MET:'தேவையான சேமிப்பு இல்லை', CATEGORY_NOT_ACCEPTED:'இந்த வகையை ஏற்காது', CAPACITY_EXCEEDED:'கொள்ளளவு போதாது',
+  CANNOT_ARRIVE_IN_SAFE_WINDOW:'பாதுகாப்பான நேரத்திற்குள் வர முடியாது', NOT_VERIFIED_OR_INACTIVE:'சரிபார்க்கப்படவில்லை',
+  speakTitle:'பேசுங்கள் அல்லது தட்டச்சு செய்யுங்கள்', speak:'பேசு', fillForm:'படிவத்தை நிரப்பு', understood:'புரிந்துகொண்டது', fCategory:'உணவு வகை', fStorage:'சேமிப்பு',
+  confirmSafety:'மேலே உள்ள உணவு வகை, சேமிப்பு, பேக் செய்த நேரம் சரியானவை என்று உறுதிப்படுத்துகிறேன்.', chooseType:'உணவு வகையையும் சேமிப்பையும் தேர்ந்தெடுக்கவும்.',
+  pickup:'பெறுதல்', incidents:'புகார்கள்', fairness:'நியாயப் பகிர்வு', reportProblem:'சிக்கலைத் தெரிவி', frozen:'முடக்கப்பட்டது', discarded:'அகற்றப்பட்டது', pickupVerified:'பெறுதல் சரிபார்க்கப்பட்டது',
+  login:'உள்நுழை', logout:'வெளியேறு', register:'உங்கள் அமைப்பைப் பதிவு செய்யுங்கள்', username:'பயனர் பெயர்', password:'கடவுச்சொல்', approve:'அனுமதி',
+  live:'நேரலை', route:'மீட்புத் திட்டம்', passport:'உணவு பதிவேடு', back:'திரும்பு', rd:'சத்தமாகப் படி', claimNext:'இந்த இடத்தைக் கோருங்கள்', nextStop:'அடுத்த இடம்',
+  stg_listed:'பதிவு', stg_offered:'வழங்கப்பட்டது', stg_claimed:'கோரப்பட்டது', stg_pickup:'எடுப்பு', stg_handover:'ஒப்படைப்பு',
+  out_success:'மீட்கப்பட்டது', out_failed:'மீட்கப்படவில்லை', out_in_progress:'நடைபெறுகிறது', onlyYou:'இதை உங்களால் மட்டுமே மீட்க முடியும்', urgent:'அவசரம்',
+  packs:'பொதிகள்', heroH:'மிஞ்சிய உணவு, பசித்தவர் தட்டுக்கு.',
+  heroSub:'மிஞ்சிய உணவை பேக்கரிகளும் சமையலறைகளும் பதிவு செய்கின்றன. அருகிலுள்ள காப்பகங்களும் சமூகச் சமையலறைகளும் பாதுகாப்பான நேரத்துக்குள் அதைப் பெறுகின்றன.',
+  noVoice:'இந்தச் சாதனத்தில் தமிழ்க் குரல் இல்லை.', offlineBanner:'இணைப்பு இல்லை. கடைசிப் புதுப்பிப்பு', bigMode:'பெரிய பொத்தான்கள்',
+  cat_packaged_bakery:'பொதியிடப்பட்ட பேக்கரி உணவு', cat_cooked_meal:'சமைத்த உணவு', cat_fresh_produce:'புதிய காய்கறி, பழம்',
+  "type": "உணவு வகையும் சேமிப்பும்",
+  "packedAgo": "எத்தனை நிமிடங்களுக்கு முன் பேக் செய்யப்பட்டது?",
+  "collectWithin": "எத்தனை நிமிடங்களுக்குள் எடுத்துச் செல்லலாம்?",
+  "ranked": "பரிந்துரைக்கப்படும் பெறுநர்கள்",
+  "excluded": "தகுதியற்றவை",
+  "score": "மதிப்பெண்",
+  "eta": "நிமிடம் தொலைவில்",
+  "acceptedQty": "ஏற்ற அளவு",
+  "listed": "பதிவான அலகுகள்",
+  "collected": "பெறப்பட்ட அலகுகள்",
+  "done": "முடிந்த ஒப்படைப்புகள்",
+  "refused": "மறுக்கப்பட்ட ஒப்படைப்புகள்",
+  "chainOk": "பதிவுச் சங்கிலி சரியாக உள்ளது",
+  "chainBad": "பதிவுச் சங்கிலி உடைந்துள்ளது, நிகழ்வு எண்",
+  "checked": "நிகழ்வுகள் சரிபார்க்கப்பட்டன",
+  "simLink": "உருவகம்: என்ன மாறக்கூடும்? (இது ஒரு மாதிரி; உண்மையான முடிவுகள் அல்ல)",
+  "proofNote": "எண்கள் பதிவான நிகழ்வுகளிலிருந்தே மீண்டும் கணக்கிடப்படுகின்றன. மாற்றம் நடந்தால் இந்தச் சங்கிலி அதைக் கண்டுபிடிக்கும்; ஆனால் மாற்றவே முடியாது என்று பொருளல்ல.",
+  "completed": "முடிந்தது",
+  "publishedOk": "பதிவு வெளியிடப்பட்டது",
+  "claimedOk": "கோரப்பட்டது. எடுக்கும்போது உறுதிப்படுத்துங்கள்.",
+  "handedOk": "ஒப்படைப்பு பதிவானது",
+  "claimExpires": "கோரிக்கை காலாவதியாக மீதம்",
+  "orgName": "அமைப்பின் பெயர்",
+  "role": "நான் ஒரு",
+  "donor": "உணவு வழங்குபவர்",
+  "recipient": "உணவு பெறும் அமைப்பு",
+  "capacity": "ஒரு நாளைக்கு எத்தனை பொதிகள் ஏற்க முடியும்?",
+  "categories": "நீங்கள் ஏற்கும் உணவு வகைகள்",
+  "storages": "உங்களிடம் உள்ள சேமிப்பு வசதி",
+  "lat": "அட்சரேகை",
+  "lon": "தீர்க்கரேகை",
+  "useLoc": "என் இருப்பிடத்தைப் பயன்படுத்து",
+  "haveAcct": "ஏற்கெனவே பதிவு செய்தீர்களா? உள்நுழையுங்கள்",
+  "registeredOk": "பதிவு செய்யப்பட்டது. செயல்படுவதற்கு முன் நிர்வாகி அனுமதிக்க வேண்டும். இப்போது உள்நுழையலாம்.",
+  "pending": "நிர்வாகியின் அனுமதிக்காகக் காத்திருக்கிறது. பார்வையிடலாம்; ஆனால் அனுமதி கிடைக்கும் வரை பதிவிடவோ கோரவோ முடியாது.",
+  "pendingList": "அனுமதிக்காகக் காத்திருப்பவை",
+  "verifiedList": "சரிபார்க்கப்பட்டவை",
+  "noPending": "காத்திருக்கும் அமைப்புகள் இல்லை.",
+  "speakHint": "எ.கா. 20 பாக்கெட் ரொட்டி, 30 நிமிடங்களுக்கு முன் பேக் செய்தது, 2 மணி நேரத்தில் எடுத்துக்கொள்ளலாம்",
+  "notFound": "கிடைக்கவில்லை (தயவுசெய்து நிரப்புங்கள்)",
+  "engineNote": "எளிய விதிகளால் நிரப்பப்பட்டது; செயற்கை நுண்ணறிவு அல்ல. ஒவ்வொரு புலத்தையும் சரிபாருங்கள்.",
+  "fPacked": "பேக் செய்தது (நிமிடங்களுக்கு முன்)",
+  "fCollect": "எடுக்க வேண்டிய நேரம் (நிமிடங்களுக்குள்)",
+  "micUnsupported": "இந்த உலாவியில் குரல் உள்ளீடு ஆதரிக்கப்படவில்லை. தட்டச்சு செய்யுங்கள்.",
+  "listening": "கேட்கிறது…",
+  "micDenied": "மைக்ரோஃபோன் தடுக்கப்பட்டுள்ளது. அனுமதியுங்கள்; HTTPS அல்லது localhost பயன்படுத்துங்கள்.",
+  "micError": "மைக்ரோஃபோன் பிழை:",
+  "note_MIXED_CATEGORIES": "ஒரே வாக்கியத்தில் பல உணவு வகைகள் உள்ளன. தனித்தனிப் பதிவுகளாக இடுங்கள்.",
+  "note_CONFLICTING_STORAGE": "ஒன்றுக்கு மேற்பட்ட சேமிப்பு முறைகள் குறிப்பிடப்பட்டுள்ளன. சரியானதைத் தேர்ந்தெடுங்கள்.",
+  "note_UNIT_NOT_PACKS": "அளவு பொதிகளில் இல்லை; அலகு எண்ணிக்கையாக எடுக்கப்பட்டது. சரிபாருங்கள்.",
+  "note_DEADLINE_PASSED": "நீங்கள் சொன்ன எடுக்கும் நேரம் கடந்துவிட்டது அல்லது தெளிவாக இல்லை. சரிபாருங்கள்.",
+  "note_AMBIGUOUS_CLOCK": "நேரத்தில் காலை/மாலை குறிப்பிடப்படவில்லை; அருகிலுள்ள சாத்தியமான நேரம் எடுக்கப்பட்டது. சரிபாருங்கள்.",
+  "note_COMBO_NOT_ACCEPTED": "இந்த உணவு வகையும் சேமிப்பு முறையும் சேர்ந்து இன்னும் ஏற்கப்படவில்லை.",
+  "verifyPickupTitle": "பெறுதல் குறியீட்டைச் சரிபார்",
+  "enterCode": "பெறும் அமைப்பு காட்டும் குறியீடு",
+  "verifyBtn": "குறியீட்டைச் சரிபார்",
+  "scan": "QR குறியீட்டை ஸ்கேன் செய்",
+  "scanUnsupported": "இந்த உலாவியில் QR ஸ்கேன் ஆதரிக்கப்படவில்லை. குறியீட்டைத் தட்டச்சு செய்யுங்கள்.",
+  "showCode": "இந்தக் குறியீட்டை உணவு வழங்குபவரிடம் காட்டுங்கள்.",
+  "mustVerifyFirst": "உணவு வழங்குபவர் உங்கள் குறியீட்டைச் சரிபார்க்கக் காத்திருக்கிறது. அதன் பிறகு ஒப்படைப்பை ஏற்கலாம்.",
+  "verifiedMsg": "சரிபார்க்கப்பட்டது. இனி அவர்கள் தங்கள் செயலியில் ஒப்படைப்பை ஏற்கலாம்.",
+  "problemPrompt": "சிக்கலை விவரியுங்கள். நிர்வாகி பரிசீலிக்கும் வரை இந்தப் பதிவு முடக்கப்படும்.",
+  "reportedOk": "தெரிவிக்கப்பட்டது. நிர்வாகி பரிசீலிப்பார்.",
+  "release": "விடுவி",
+  "discard": "அகற்று",
+  "resolveNote": "உங்கள் முடிவு பற்றிய குறிப்பு (விருப்பம்)",
+  "resolvedOk": "புகார் தீர்க்கப்பட்டது.",
+  "noIncidents": "புகார்கள் எதுவும் இல்லை.",
+  "offeredYou": "முதலில் உங்களுக்கு வழங்கப்பட்டது",
+  "offeredOther": "முதலில் வேறு அமைப்புக்கு வழங்கப்பட்டது. அனைவருக்கும் திறக்க மீதம்",
+  "offeredTo": "முதலில் வழங்கப்பட்டது",
+  "offerEnds": "முன்னுரிமை முடிய மீதம்",
+  "claimedBy": "கோரியது",
+  "uncollected": "பெறப்படாத அலகுகள்",
+  "incidentsTile": "தெரிவிக்கப்பட்ட புகார்கள்",
+  "fOffers": "வழங்கல்கள்",
+  "fClaims": "கோரிக்கைகள்",
+  "fDone": "முடிந்தவை",
+  "fExpired": "காலாவதி",
+  "fRefused": "மறுத்தவை",
+  "fUnits": "அலகுகள்",
+  "fShare": "பெறப்பட்டவற்றில் பங்கு",
+  "concentration": "பெறப்பட்ட உணவில் பாதிக்கு மேல் ஒரே அமைப்புக்குச் சென்றுள்ளது. பொருத்தம் நியாயமாக உள்ளதா எனப் பாருங்கள்.",
+  "fairNote": "யாருக்கு முதலில் வழங்கப்படுகிறது என்பதை வழங்கல்கள் காட்டும். பங்குகள், சரிபார்க்கப்பட்டுப் பெறப்பட்ட அலகுகளின் அடிப்படையில் உள்ளவை.",
+  "open": "திறந்தது",
+  "resolved": "தீர்க்கப்பட்டது",
+  "reporter": "தெரிவித்தவர்",
+  "print": "அச்சிடு / PDF ஆகச் சேமி",
+  "risk_WINDOW_CLOSING": "பாதுகாப்பான நேரம் விரைவில் முடிகிறது",
+  "risk_CLAIM_EXPIRING": "கோரிக்கை விரைவில் காலாவதியாகும்",
+  "risk_NO_TAKER_YET": "இன்னும் யாரும் கோரவில்லை",
+  "out_on_hold": "நிறுத்தி வைக்கப்பட்டது: புகார் பரிசீலனை",
+  "why_NO_TAKER_BEFORE_DEADLINE": "பாதுகாப்பான நேரம் முடிவதற்குள் எந்த அமைப்பும் பெறவில்லை",
+  "why_REFUSED_AT_HANDOVER": "ஒப்படைப்பின்போது மறுக்கப்பட்டது",
+  "why_DISCARDED_AFTER_INCIDENT": "புகார் பரிசீலனைக்குப் பின் அகற்றப்பட்டது",
+  "why_HANDOVER_CONFIRMED": "ஒப்படைப்பு உறுதிசெய்யப்பட்டது",
+  "liveNote": "ஒவ்வொரு 5 விநாடிக்கும் புதுப்பிக்கப்படும். நிலைகள் பதிவான நிகழ்வுகளிலிருந்து வருகின்றன.",
+  "offersMade": "வழங்கல்கள்",
+  "claimsLapsed": "காலாவதியான கோரிக்கைகள்",
+  "planTitle": "உங்கள் மீட்புத் திட்டம்",
+  "vehicleCap": "வாகனக் கொள்ளளவு (பொதிகள்)",
+  "replan": "மீண்டும் திட்டமிடு",
+  "planUnits": "இந்தப் பாதையில் பொதிகள்",
+  "planMins": "மொத்த நிமிடங்கள்",
+  "backupPlan": "முதல் நிறுத்தம் தவறினால் மாற்றுத் திட்டம்",
+  "claimedAlready": "ஏற்கெனவே நீங்கள் கோரியது",
+  "legMin": "நிமிட பயணம்",
+  "arriveIn": "சென்றடைய",
+  "slack": "கூடுதல் நேரம்",
+  "noPlan": "இந்தக் கொள்ளளவுடன் இப்போது எதையும் எடுக்க முடியாது.",
+  "skippedTitle": "திட்டத்தில் சேர்க்கப்படாதவை",
+  "sk_WOULD_MISS_DEADLINE": "உரிய நேரத்தில் உங்களால் சென்றடைய முடியாது",
+  "sk_EXCEEDS_VEHICLE_CAPACITY": "வாகனத்திற்கு மிகப் பெரியது",
+  "sk_BETTER_ROUTE_USES_THE_TIME_OR_SPACE": "சிறந்த பாதை அந்த நேரத்தையோ இடத்தையோ பயன்படுத்துகிறது",
+  "sk_NOT_CONSIDERED_TOO_MANY_OPTIONS": "தேர்வுகள் மிக அதிகம்; பரிசீலிக்கப்படவில்லை",
+  "assumptions": "அனுமானங்கள்",
+  "claimTip": "அடுத்த நிறுத்தத்தை மட்டும் கோருங்கள்; கோரிக்கை 15 நிமிடங்களில் காலாவதியாகும்.",
+  "stops": "நிறுத்தங்கள்",
+  "declaration": "பொருட்கள் / ஒவ்வாமைக் குறிப்பு (உங்கள் சொந்த அறிவிப்பு)",
+  "declPh": "எ.கா. கோதுமை, பால் உள்ளது; சீல் செய்த பொதிகள்",
+  "passTitle": "உணவு தடமறிதல் பதிவு",
+  "passDonor": "வழங்குபவர்",
+  "passFood": "உணவுப் பதிவு",
+  "passPacked": "பேக் செய்தது",
+  "passDeadline": "வழங்குபவர் கூறிய கெடு",
+  "passLatest": "எடுக்க வேண்டிய கடைசி நேரம்",
+  "passDecl": "வழங்குபவரின் அறிவிப்பு",
+  "passNone": "எதுவும் இல்லை",
+  "passHistory": "கையாளுதல் வரலாறு",
+  "passIncidents": "புகார் அறிக்கைகள்",
+  "passRefusals": "பெறுநர் மறுப்புகள்",
+  "passIntegrity": "பதிவின் நம்பகத்தன்மை",
+  "passScan": "இந்தப் பதிவைத் திறக்க ஸ்கேன் செய்யுங்கள் (உள்நுழைவு தேவை)",
+  "ev_DONATION_PUBLISHED": "வழங்குபவர் பதிவிட்டார்",
+  "ev_OFFER_MADE": "முதலில் ஓர் அமைப்புக்கு வழங்கப்பட்டது",
+  "ev_OFFER_OPEN_TO_ALL": "அனைத்து அமைப்புகளுக்கும் திறக்கப்பட்டது",
+  "ev_CLAIM_RESERVED": "கோரப்பட்டது",
+  "ev_CLAIM_EXPIRED": "கோரிக்கை காலாவதியானது",
+  "ev_PICKUP_VERIFIED": "வழங்குபவர் பெறுதல் குறியீட்டைச் சரிபார்த்தார்",
+  "ev_HANDOVER_COMPLETED": "ஒப்படைப்பு ஏற்கப்பட்டது",
+  "ev_HANDOVER_REFUSED": "ஒப்படைப்பு மறுக்கப்பட்டது",
+  "ev_DONATION_EXPIRED": "பாதுகாப்பான நேரம் முடிந்தது, பெறப்படவில்லை",
+  "ev_DONATION_DISCARDED": "அகற்றப்பட்டது",
+  "ev_INCIDENT_REPORTED": "சிக்கல் தெரிவிக்கப்பட்டது",
+  "ev_INCIDENT_RESOLVED": "சிக்கல் தீர்க்கப்பட்டது",
+  "pCompletion": "நிறைவு விகிதம்",
+  "pToCollect": "சராசரி நிமிடங்கள்: பதிவு முதல் பெறுதல் வரை",
+  "pToClaim": "சராசரி நிமிடங்கள்: பதிவு முதல் முதல் கோரிக்கை வரை",
+  "pLapsed": "காலாவதியான கோரிக்கைகள்",
+  "pReasons": "உணவு ஏன் பெறப்படவில்லை",
+  "pRefusal": "மறுப்புக் காரணங்கள்",
+  "pCategory": "உணவு வகை வாரியாக",
+  "pPeople": "பங்கேற்கும் அமைப்புகள்",
+  "pDonors": "வழங்குபவர்கள்",
+  "pRecips": "பெறுபவர்கள்",
+  "pActive": "ஒப்படைப்பை முடித்த பெறுபவர்கள்",
+  "pNone": "இன்னும் தரவு இல்லை",
+  "offlineNote": "கோரிக்கைகளுக்கும் ஒப்படைப்புகளுக்கும் இணைப்பு தேவை. இது நீடித்தால் உங்கள் ஒருங்கிணைப்பாளரைத் தொலைபேசியில் அழையுங்கள்.",
+  "draftSaved": "வரைவு இந்தத் தொலைபேசியில் சேமிக்கப்பட்டது",
+  "pendingTitle": "பதிவு இன்னும் அனுப்பப்படவில்லை",
+  "sendNow": "இப்போது அனுப்பு",
+  "droppedStale": "சேமித்த பதிவு அனுப்பப்படவில்லை: அதன் பாதுகாப்பான நேரம் முடிந்துவிட்டது.",
+  "sentOk": "சேமித்த பதிவு அனுப்பப்பட்டது",
+  "passDisclaimer": "இந்தப் பதிவு எது அறிவிக்கப்பட்டது, என்ன நடந்தது என்பதை மட்டுமே பதிவு செய்கிறது. உணவு பாதுகாப்பானது என்று இது சான்றளிக்காது; தகுதி விதிகளை தகுதிவாய்ந்த உணவுப் பாதுகாப்பு நிபுணர் மதிப்பாய்வு செய்ய வேண்டும்.",
+  "stor_ambient": "அறை வெப்பநிலை",
+  "stor_chilled": "குளிர்சாதனத்தில்",
+  "stor_hot_held": "சூடாக வைத்தது",
+  "rs_CATEGORY_ACCEPTED": "இந்த வகையை ஏற்கிறது",
+  "rs_STORAGE_COMPATIBLE": "பொருத்தமான சேமிப்பு உள்ளது",
+  "rs_CAPACITY_AVAILABLE": "இடவசதி உள்ளது",
+  "rs_ARRIVES_WITH_TIME_TO_SPARE": "பாதுகாப்பான நேரத்திற்குள் சென்றடைய முடியும்",
+  "rs_FAIR_SHARE_ROTATION": "சமீபத்தில் குறைவாகப் பெற்றுள்ளது",
+  "explainLead": "பரிந்துரைக்கக் காரணம்:",
+  "explainNote": "இது ஒருங்கிணைப்புப் பரிந்துரை மட்டுமே; உணவு பாதுகாப்பானது என்று சான்றளிப்பதல்ல.",
+  "sessionExpired": "அமர்வு காலாவதியானது. மீண்டும் உள்நுழையுங்கள்.",
+  "locUnavailable": "இருப்பிடம் கிடைக்கவில்லை. ஆயங்களைத் தட்டச்சு செய்யுங்கள்.",
+  "why_INCIDENT_REVIEW": "புகார் பரிசீலனையில் உள்ளது",
+  "methodNote": "அலகுகள் என்பவை வழங்குபவர்கள் பதிவிட்டவை (பொதிகள் அல்லது எண்ணிக்கை) மட்டுமே. அலகு அளவுகள் பதிவாவதில்லை என்பதால் உணவு வேளை அல்லது கரிம உமிழ்வு மதிப்பீடுகள் செய்யப்படுவதில்லை; அத்தகைய மதிப்பீட்டிற்கு வெளிப்படுத்தப்பட்ட அனுமானங்களும் நிச்சயமின்மையும் தேவை.",
+  "assumpText": "{v} கி.மீ/மணி வேகம்; ஒவ்வொரு நிறுத்தத்திலும் {m} நிமிடம்; நேர்கோட்டு தூரம் (உண்மையான சாலைகள் நீளமாக இருக்கும்)",
+  "minWord": "நிமிடம்",
+  "roleLbl_donor": "உணவு வழங்குபவர்",
+  "roleLbl_recipient": "உணவு பெறும் அமைப்பு",
+  "roleLbl_admin": "நிர்வாகி"
+}
+};
+Object.assign(I18N.en, {home: 'Home', getStarted: 'Get started', verifiedB: 'Verified', pendingB: 'Pending approval'});
+Object.assign(I18N.ta, {home: 'முகப்பு', getStarted: 'தொடங்குங்கள்', verifiedB: 'சரிபார்க்கப்பட்டது', pendingB: 'ஒப்புதலுக்காகக் காத்திருக்கிறது'});
+const t = k => (I18N[S.lang] && I18N[S.lang][k]) || I18N.en[k] || k;
+const pretty = s => String(s).replace(/_/g, ' ');
+const stat = s => t(s === 'collected' ? 'collected_s' : s);
+const ERR_TA = {"a reason is required when refusing": "மறுக்கும்போது காரணம் தேவை", "already reserved": "ஏற்கெனவே வேறொருவரால் ஒதுக்கப்பட்டுவிட்டது", "claim is not active": "இந்தக் கோரிக்கை இப்போது செயலில் இல்லை", "this claim is no longer active": "இந்தக் கோரிக்கை இப்போது செயலில் இல்லை", "invalid accepted quantity": "ஏற்ற அளவு சரியல்ல", "invalid code": "குறியீடு செல்லாது", "invalid or expired session": "அமர்வு காலாவதியானது; மீண்டும் உள்நுழையுங்கள்", "login required": "உள்நுழைவு தேவை", "listing is not available": "இந்தப் பதிவு இப்போது கிடைக்கவில்லை", "not allowed for your role": "உங்கள் பங்குக்கு இது அனுமதிக்கப்படவில்லை", "not involved in this listing": "இந்தப் பதிவில் உங்களுக்குத் தொடர்பில்லை", "you are not involved in this listing": "இந்தப் பதிவில் உங்களுக்குத் தொடர்பில்லை", "not your claim": "இது உங்கள் கோரிக்கை அல்ல", "not your listing": "இது உங்கள் பதிவு அல்ல", "offered to another organisation first; it opens to everyone shortly": "முதலில் வேறு அமைப்புக்கு வழங்கப்பட்டுள்ளது; விரைவில் அனைவருக்கும் திறக்கப்படும்", "pickup not verified yet: ask the donor to verify your pickup code": "பெறுதல் இன்னும் சரிபார்க்கப்படவில்லை: உங்கள் குறியீட்டைச் சரிபார்க்க உணவு வழங்குபவரிடம் கேளுங்கள்", "quantity must be positive": "அளவு பூஜ்யத்தை விட அதிகமாக இருக்க வேண்டும்", "safe window already closed": "பாதுகாப்பான நேரம் ஏற்கெனவே முடிந்துவிட்டது", "simulator is busy, try again in a few seconds": "உருவகம் பரபரப்பாக உள்ளது; சில விநாடிகளில் மீண்டும் முயலுங்கள்", "this code has expired": "இந்தக் குறியீடு காலாவதியாகிவிட்டது", "this code was already used": "இந்தக் குறியீடு ஏற்கெனவே பயன்படுத்தப்பட்டது", "too many attempts, try again in a minute": "பல முறை முயன்றுவிட்டீர்கள்; ஒரு நிமிடம் கழித்து மீண்டும் முயலுங்கள்", "unknown category or storage type": "தெரியாத உணவு வகை அல்லது சேமிப்பு முறை", "username already taken": "இந்தப் பயனர் பெயர் ஏற்கெனவே எடுக்கப்பட்டுள்ளது", "username: 3-40 characters, letters, digits . _ -": "பயனர் பெயர்: 3-40 எழுத்துகள்; எழுத்துகள், எண்கள், . _ - மட்டும்", "wrong username or password": "பயனர் பெயர் அல்லது கடவுச்சொல் தவறு", "your earlier claim on this listing expired": "இந்தப் பதிவில் உங்கள் முந்தைய கோரிக்கை காலாவதியானது", "your organisation must be approved first": "முதலில் உங்கள் அமைப்பு அனுமதிக்கப்பட வேண்டும்", "donor must be a verified donor": "சரிபார்க்கப்பட்ட உணவு வழங்குபவர் மட்டுமே பதிவிட முடியும்", "incident already resolved": "இந்தப் புகார் ஏற்கெனவே தீர்க்கப்பட்டது", "decision must be release or discard": "முடிவு 'விடுவி' அல்லது 'அகற்று' ஆக இருக்க வேண்டும்", "claim": "கிடைக்கவில்லை", "donation": "கிடைக்கவில்லை", "organisation": "கிடைக்கவில்லை", "incident": "கிடைக்கவில்லை", "donation or recipient": "கிடைக்கவில்லை"};
+function trErr(m) {      // server errors come in English, so we swap them to Tamil when the app is in Tamil
+  if (S.lang !== 'ta') return m;
+  if (ERR_TA[m]) return ERR_TA[m];
+  let x = /^not eligible: (.+)$/.exec(m); if (x) return 'தகுதியற்றது: ' + x[1].split(',').map(c => t(c)).join(', ');
+  if (/^Category\/storage .* is not accepted/.test(m)) return 'இந்த உணவு வகை/சேமிப்பு முறை இன்னும் ஏற்கப்படவில்லை';
+  return m;
+}
+const store = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} };
+
+async function api(path, o = {}) {
+  const headers = {'Content-Type': 'application/json'};
+  if (S.token) headers.Authorization = 'Bearer ' + S.token;
+  let r;
+  try { r = await fetch('/api' + path, {method: o.method || 'GET', headers, body: o.body ? JSON.stringify(o.body) : undefined}); }
+  catch (e) { S.lastFail = Date.now(); const err = new Error(t('offlineNote')); err.offline = true; throw err; }
+  S.lastOk = Date.now();
+  let j = null; try { j = await r.json(); } catch (e) {}
+  if (r.status === 401 && S.token && path !== '/auth/login') { logout(); throw new Error(t('sessionExpired')); }
+  if (!r.ok) { const d = j && j.detail, raw = Array.isArray(d) ? d.map(x => x.msg).join('; ') : (d || r.statusText); const err = new Error(trErr(raw)); err.raw = raw; throw err; }
+  return j;
+}
+let toastT;
+function toast(msg, bad) { if (!bad && [t('claimedOk'), t('handedOk'), t('registeredOk')].includes(msg)) confetti(); if (bad && /offline|connection/i.test(msg)) S.lastFail = Date.now(); const el = $('#toast'); el.textContent = msg; el.className = 'toast' + (bad ? ' bad' : ''); el.style.display = 'block'; clearTimeout(toastT); toastT = setTimeout(() => el.style.display = 'none', 4000); }
+const guard = fn => async (...a) => { try { await fn(...a); } catch (e) { toast(e.message, true); } };
+const sync = d => { if (d && d.server_now) S.offset = new Date(d.server_now).getTime() - Date.now(); };
+
+function tick() {
+  const now = Date.now() + S.offset;
+  document.querySelectorAll('[data-dl]').forEach(el => {
+    const ms = new Date(el.dataset.dl).getTime() - now;
+    if (ms <= 0) { el.textContent = t('closed'); el.className = 'clock red'; return; }
+    const m = Math.floor(ms / 60000), s = Math.floor(ms % 60000 / 1000);
+    el.textContent = m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + ':' + String(s).padStart(2, '0');
+    el.className = 'clock ' + (m >= 30 ? 'green' : m >= 10 ? 'amber' : 'red');
+  });
+}
+setInterval(tick, 1000);
+
+const clock = (dl, label) => `<div><span class="mut">${esc(label || t('timeLeft'))}</span> <span class="clock" data-dl="${esc(dl)}"></span></div>`;
+const TABS = {donor: [['new', 'newListing'], ['mine', 'myListings'], ['live', 'live'], ['pickup', 'pickup'], ['proof', 'proof']], recipient: [['feed', 'feed'], ['route', 'route'], ['claims', 'myClaims'], ['proof', 'proof']], admin: [['live', 'live'], ['approve', 'approvals'], ['incidents', 'incidents'], ['fairness', 'fairness'], ['proof', 'proof']]};
+
+function logout() { S.token = null; S.me = null; S.tab = null; S.mode = 'home'; store('fb_token', null); show(); }
+
+const TICO = ['bread', 'apple', 'carrot', 'rice', 'milk', 'banana', 'tomato', 'orange'];
+function renderChrome() {
+  $('#lang').textContent = S.lang === 'en' ? 'தமிழ்' : 'EN';
+  $('#safety').textContent = t('safety');
+  $('#who').textContent = S.me ? S.me.name : '';
+  $('#out').hidden = !S.me; $('#out').textContent = t('logout'); $('#out').onclick = logout;
+  const items = S.me ? TABS[S.me.role].map(([k, l]) => [k, t(l), 0]) : [['home', t('home'), 0], ['login', t('login'), 0], ['register', t('getStarted'), 1]];
+  const cur = S.me ? S.tab : S.mode;
+  $('#tabs').innerHTML = items.map(([k, l, cta], n) => `<button class="${cur === k ? 'on' : ''}${cta ? ' cta' : ''}" data-tab="${k}"><svg class="ico s"><use href="#i-${TICO[n % 8]}"/></svg>${esc(l)}</button>`).join('');
+  $('#tabs').querySelectorAll('button').forEach(b => b.onclick = () => { if (S.me) S.tab = b.dataset.tab; else S.mode = b.dataset.tab; closeMenu(); scrollTo(0, 0); show(); });
+}
+function closeMenu() { $('#nav').classList.remove('open'); $('#burger').classList.remove('x'); $('#burger').setAttribute('aria-expanded', 'false'); }
+
+async function show() {
+  if (S.stopScan) { S.stopScan(); S.stopScan = null; }
+  renderChrome();
+  const v = $('#view');
+  v.className = S.me ? 'v-' + S.tab : (S.mode === 'home' ? 'wide' : 'v-auth');
+  if (!S.me) { viewAuth(); fxInit(v); return; }
+  try {
+    if (S.tab === 'new') viewNew(); else if (S.tab === 'mine') await viewMine(); else if (S.tab === 'feed') await viewFeed();
+    else if (S.tab === 'claims') await viewClaims(); else if (S.tab === 'live') await viewLive(); else if (S.tab === 'route') await viewRoute(); else if (S.tab === 'passport') await viewPassport(); else if (S.tab === 'approve') await viewApprove(); else if (S.tab === 'pickup') viewPickup(); else if (S.tab === 'incidents') await viewIncidents(); else if (S.tab === 'fairness') await viewFairness(); else await viewProof();
+  } catch (e) { toast(e.message, true); }
+  if (S.me && !S.me.verified && S.me.role !== 'admin') v.insertAdjacentHTML('afterbegin', `<div class="card warn">${esc(t('pending'))}</div>`);
+  v.insertAdjacentHTML('afterbegin', pageTitle());
+  dashTiles(v, S.tab); fxInit(v);
+  tick();
+}
+
+function uniq(k) { return [...new Set(S.rules.map(r => r[k]))]; }
+function viewAuth() {
+  const v = $('#view');
+  if (S.mode === 'home') return viewHome();
+  if (S.mode === 'login') {
+    v.innerHTML = authHead() + `<div class="card authcard"><h2>${esc(t('login'))}</h2>
+      <label>${esc(t('username'))}</label><input id="l-user" autocomplete="username" autocapitalize="none">
+      <label>${esc(t('password'))}</label><input id="l-pass" type="password" autocomplete="current-password">
+      <button class="btn" id="l-go">${esc(t('login'))}</button>
+      <button class="link" id="to-reg">${esc(t('register'))}</button></div>`;
+    $('#to-reg').onclick = () => { S.mode = 'register'; show(); };
+    const go = guard(async () => {
+      const r = await api('/auth/login', {method: 'POST', body: {username: $('#l-user').value, password: $('#l-pass').value}});
+      S.token = r.token; S.me = r.org; store('fb_token', r.token); S.tab = TABS[r.org.role][0][0]; show();
+    });
+    $('#l-go').onclick = go; $('#l-pass').onkeydown = e => { if (e.key === 'Enter') go(); };
+  } else {
+    v.innerHTML = authHead() + `<div class="card authcard"><h2>${esc(t('register'))}</h2>
+      <label>${esc(t('role'))}</label><select class="f" id="r-role"><option value="donor">${esc(t('donor'))}</option><option value="recipient">${esc(t('recipient'))}</option></select>
+      <label>${esc(t('orgName'))}</label><input id="r-name">
+      <label>${esc(t('username'))}</label><input id="r-user" autocapitalize="none">
+      <label>${esc(t('password'))}</label><input id="r-pass" type="password" autocomplete="new-password">
+      <label>${esc(t('lat'))}</label><input id="r-lat" inputmode="decimal"><label>${esc(t('lon'))}</label><input id="r-lon" inputmode="decimal">
+      <button class="btn alt sm" id="r-loc">${esc(t('useLoc'))}</button>
+      <div id="r-rec" hidden>
+        <label>${esc(t('categories'))}</label>${uniq('category').map(c => `<label class="chk"><input type="checkbox" name="rc" value="${esc(c)}">${esc(catName(c))}</label>`).join('')}
+        <label>${esc(t('storages'))}</label>${uniq('storage').map(c => `<label class="chk"><input type="checkbox" name="rs" value="${esc(c)}">${esc(storName(c))}</label>`).join('')}
+        <label>${esc(t('capacity'))}</label><input id="r-cap" type="number" min="0" value="50" inputmode="numeric"></div>
+      <button class="btn" id="r-go">${esc(t('register'))}</button>
+      <button class="link" id="to-login">${esc(t('haveAcct'))}</button></div>`;
+    $('#to-login').onclick = () => { S.mode = 'login'; show(); };
+    $('#r-role').onchange = () => { $('#r-rec').hidden = $('#r-role').value !== 'recipient'; };
+    $('#r-loc').onclick = () => navigator.geolocation ? navigator.geolocation.getCurrentPosition(p => { $('#r-lat').value = p.coords.latitude.toFixed(5); $('#r-lon').value = p.coords.longitude.toFixed(5); }, () => toast(t('locUnavailable'), true)) : toast(t('locUnavailable'), true);
+    const checked = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(x => x.value);
+    $('#r-go').onclick = guard(async () => {
+      const rec = $('#r-role').value === 'recipient';
+      await api('/register', {method: 'POST', body: {name: $('#r-name').value, role: $('#r-role').value, username: $('#r-user').value, password: $('#r-pass').value,
+        lat: parseFloat($('#r-lat').value), lon: parseFloat($('#r-lon').value),
+        accepts_categories: rec ? checked('rc') : [], storage_available: rec ? checked('rs') : [], capacity_remaining: rec ? +$('#r-cap').value : 0}});
+      const u = $('#r-user').value; S.mode = 'login'; show(); $('#l-user').value = u; toast(t('registeredOk'));
+    });
+  }
+}
+
+function viewNew() {
+  S.voiceDraft = false;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const opts = `<option value="">—</option>` + S.rules.map((r, i) => `<option value="${i}">${esc(catName(r.category))} · ${esc(storName(r.storage))}</option>`).join('');
+  $('#view').innerHTML = `<div class="card"><h2>🎤 ${esc(t('speakTitle'))}</h2>
+   <textarea id="v-text" rows="3" maxlength="500" placeholder="${esc(t('speakHint'))}"></textarea>
+   <div class="row"><button class="btn alt sm" id="v-mic" ${SR ? '' : 'hidden'}>🎤 ${esc(t('speak'))}</button><button class="btn sm" id="v-fill">${esc(t('fillForm'))}</button></div>
+   ${SR ? '' : `<div class="mut">${esc(t('micUnsupported'))}</div>`}<div id="v-out"></div></div>
+   <div class="card"><h2>${esc(t('newListing'))}</h2>
+   <label>${esc(t('type'))}</label><select class="f" id="n-type">${opts}</select>
+   <label>${esc(t('quantity'))}</label><input id="n-qty" type="number" min="1" value="20" inputmode="numeric">
+   <label>${esc(t('packedAgo'))}</label><input id="n-ago" type="number" min="0" value="30" inputmode="numeric">
+   <label>${esc(t('collectWithin'))}</label><input id="n-win" type="number" min="1" value="120" inputmode="numeric">
+   <label>${esc(t('declaration'))}</label><input id="n-decl" maxlength="300" placeholder="${esc(t('declPh'))}">
+   <div id="v-conf" hidden><label class="chk"><input type="checkbox" id="v-ok">${esc(t('confirmSafety'))}</label></div>
+   <button class="btn" id="n-go">${esc(t('publish'))}</button></div>`;
+  $('#n-type').value = S.rules.length ? '0' : '';
+  try {   // bring back a draft that was saved on this phone but never sent
+    const dr = JSON.parse(localStorage.getItem('fb_draft') || 'null');
+    if (dr) { $('#n-type').value = dr.type; $('#n-qty').value = dr.qty; $('#n-ago').value = dr.ago; $('#n-win').value = dr.win; $('#n-decl').value = dr.decl || ''; }
+  } catch (e) {}
+  const saveDraft = () => store('fb_draft', JSON.stringify({type: $('#n-type').value, qty: $('#n-qty').value, ago: $('#n-ago').value, win: $('#n-win').value, decl: $('#n-decl').value}));
+  ['#n-type', '#n-qty', '#n-ago', '#n-win', '#n-decl'].forEach(s => $(s).addEventListener('input', saveDraft));
+  const pend = pendingGet();
+  if (pend) $('#view').insertAdjacentHTML('afterbegin', `<div class="card warn"><b>${esc(t('pendingTitle'))}</b><div class="mut">${+pend.quantity} · ${esc(catName(pend.category))}</div><button class="btn sm" id="n-send">${esc(t('sendNow'))}</button></div>`);
+  if (pend) $('#n-send').onclick = guard(() => sendPending(false));
+  const mark = (sel, on) => $(sel).classList.toggle('flag', on);
+
+  $('#v-fill').onclick = guard(async () => {
+    const text = $('#v-text').value.trim();
+    if (text.length < 3) throw new Error(t('speakHint'));
+    const d = await api('/intake/parse', {method: 'POST', body: {text, tz_offset_minutes: new Date().getTimezoneOffset()}});
+    const idx = S.rules.findIndex(r => r.category === d.category && r.storage === d.storage);
+    $('#n-type').value = idx >= 0 ? String(idx) : '';            // we never guess the storage: the donor has to pick it if we don't know
+    if (d.quantity != null) $('#n-qty').value = d.quantity;
+    if (d.packed_ago_min != null) $('#n-ago').value = d.packed_ago_min;
+    if (d.collect_within_min != null) $('#n-win').value = d.collect_within_min;
+    mark('#n-type', idx < 0); mark('#n-qty', d.quantity == null); mark('#n-ago', true); mark('#n-win', d.collect_within_min == null);
+    const lbl = {category: 'fCategory', storage: 'fStorage', quantity: 'quantity', packed_ago_min: 'fPacked', collect_within_min: 'fCollect'};
+    const got = Object.keys(lbl).filter(k => d[k] != null).map(k => `${esc(t(lbl[k]))}: <b>${esc(k === 'category' ? catName(d[k]) : k === 'storage' ? storName(d[k]) : String(d[k]).replace(/_/g, ' '))}</b>`);
+    const miss = d.missing.map(k => esc(t(lbl[k])));
+    $('#v-out').innerHTML = `<div class="mut">${esc(t('understood'))}: ${got.join(' · ') || '—'}</div>` + (miss.length ? `<div class="mut">${esc(t('notFound'))}: ${miss.join(', ')}</div>` : '')
+      + d.notes.map(c => `<div class="mut warnline">⚠ ${esc(t('note_' + c))}</div>`).join('') + `<div class="mut">${esc(t('engineNote'))}</div>`;
+    S.voiceDraft = true; $('#v-conf').hidden = false; $('#v-ok').checked = false; $('#n-go').disabled = true;
+  });
+  $('#v-ok').onchange = () => { $('#n-go').disabled = !$('#v-ok').checked; };
+
+  if (SR) $('#v-mic').onclick = () => {
+    const rec = new SR(), b = $('#v-mic');
+    rec.lang = S.lang === 'ta' ? 'ta-IN' : 'en-IN'; rec.interimResults = false; rec.maxAlternatives = 1;
+    b.textContent = '● ' + t('listening'); b.disabled = true;
+    rec.onresult = e => { $('#v-text').value = e.results[0][0].transcript; $('#v-fill').click(); };
+    rec.onerror = e => toast(e.error === 'not-allowed' ? t('micDenied') : t('micError') + ' ' + e.error, true);
+    rec.onend = () => { b.textContent = '🎤 ' + t('speak'); b.disabled = false; };
+    rec.start();
+  };
+
+  $('#n-go').onclick = guard(async () => {
+    if ($('#n-type').value === '') throw new Error(t('chooseType'));
+    const r = S.rules[+$('#n-type').value], now = Date.now();
+    const body = {category: r.category, storage: r.storage, quantity: +$('#n-qty').value, declaration: $('#n-decl').value.trim(),
+      prepared_at: new Date(now - (+$('#n-ago').value) * 60000).toISOString(), donor_deadline: new Date(now + (+$('#n-win').value) * 60000).toISOString()};
+    try { await api('/donations', {method: 'POST', body}); }
+    catch (e) {
+      if (!e.offline) throw e;        // offline: keep the listing with its exact times; the server checks the safe window again when it finally gets sent
+      S.lastFail = Date.now(); pendingSet(body); updateNet(); toast(t('draftSaved') + '. ' + t('offlineNote'), true); return viewNew();
+    }
+    store('fb_draft', null); pendingSet(null); toast(t('publishedOk')); S.tab = 'mine'; show();
+  });
+}
+
+async function viewMine() {
+  const d = await api('/donations'); sync(d);
+  $('#view').innerHTML = d.items.length ? d.items.map(x => `<div class="card ${catCls(x.category)}">${chead(x.category, `${+x.quantity} ${t('packs')} · ${storName(x.storage)}`, `<span class="badge">${esc(stat(x.status))}</span>`)}${x.status === 'published' || x.status === 'reserved' ? clock(x.latest_collect) : ''}
+    ${x.offered_to ? `<div class="mut">${esc(t('offeredTo'))}: <b>${esc(x.offered_to)}</b></div>${clock(x.offer_expires_at, t('offerEnds'))}` : ''}
+    ${x.claim ? `<div class="mut">${esc(t('claimedBy'))}: <b>${esc(x.claim.recipient)}</b>${x.claim.picked_up ? ' · ✔ ' + esc(t('pickupVerified')) : ''}</div>` : ''}
+    <button class="btn alt sm" onclick="showMatches(${+x.id})">${esc(t('seeMatches'))}</button> <button class="btn alt sm" onclick="openPassport(${+x.id})">${esc(t('passport'))}</button>
+    ${['published', 'reserved', 'collected'].includes(x.status) ? `<button class="btn alt sm" onclick="reportProblem(${+x.id})">${esc(t('reportProblem'))}</button>` : ''}<div id="m-${+x.id}"></div></div>`).join('') : `<div class="card">${esc(t('nothing'))}</div>`;
+}
+window.showMatches = guard(async id => {
+  const m = await api(`/donations/${id}/matches`), box = document.getElementById('m-' + id);
+  const li = r => `<li><b>${esc(r.name)}</b> · ${esc(t('score'))} ${esc(r.score)} · ${esc(r.eta_min)} ${esc(t('eta'))}<div class="mut">${esc(expl(r.reasons, r.explanation))}</div></li>`;
+  const ex = r => `<li><b>${esc(r.name)}</b>: ${r.excluded_reasons.map(c => esc(t(c))).join(', ')}</li>`;
+  box.innerHTML = `<h2>${esc(t('ranked'))}</h2><ol>${m.ranked.map(li).join('') || '<li>—</li>'}</ol><h2>${esc(t('excluded'))}</h2><ul>${m.excluded.map(ex).join('') || '<li>—</li>'}</ul>`;
+});
+
+async function viewFeed() {
+  const d = await api('/feed'); sync(d);
+  const card = x => {
+    const locked = x.offer === 'other';
+    const head = `${chead(x.category, `${x.donor} · ${x.eta_min} ${t('eta')} · ${storName(x.storage)}`, qtyChip(x.quantity))}${clock(x.latest_collect)}`;
+    if (locked) return `<div class="card dim ${catCls(x.category)}">${head}<div class="mut">${esc(t('offeredOther'))}</div>${clock(x.offer_expires_at, '')}</div>`;
+    if (!x.eligible) return `<div class="card dim ${catCls(x.category)}">${head}<div class="mut">${x.excluded_reasons.map(c => esc(t(c))).join(', ')}</div></div>`;
+    return `<div class="card ${catCls(x.category)}">${x.offer === 'you' ? `<div class="badge ok">${esc(t('offeredYou'))}</div>` : ''}${head}<div class="mut">${esc(expl(x.reasons, x.explanation))}</div>
+      <button class="btn claim" onclick="doClaim(${+x.id})">${esc(t('claim'))}</button>
+      <button class="btn alt sm" onclick="readAloud(${+x.quantity},'${esc(x.category)}',${esc(JSON.stringify(x.donor)).replace(/&quot;/g, '&#34;')},${+x.eta_min},${Math.max(0, mm(x.latest_collect))})">🔊 ${esc(t('rd'))}</button></div>`;
+  };
+  $('#view').innerHTML = d.items.length ? d.items.map(card).join('') : `<div class="card">${esc(t('nothing'))}</div>`;
+}
+window.doClaim = guard(async id => { await api(`/donations/${id}/claim`, {method: 'POST'}); toast(t('claimedOk')); S.tab = 'claims'; show(); });
+
+async function viewClaims() {
+  const d = await api('/claims'); sync(d);
+  const card = x => {
+    let body = '';
+    if (x.status === 'reserved') {
+      body = `${clock(x.expires_at, t('claimExpires'))}
+        <div class="qr">${x.qr_svg}</div><div class="code">${esc(x.pickup_code)}</div><div class="mut center">${esc(t('showCode'))}</div>
+        ${x.picked_up ? `<div class="ok">✔ ${esc(t('pickupVerified'))}</div>
+          <label>${esc(t('acceptedQty'))}</label><input id="q-${+x.claim_id}" type="number" min="1" max="${+x.quantity}" value="${+x.quantity}" inputmode="numeric">
+          <button class="btn" onclick="doHand(${+x.claim_id},true)">${esc(t('accept'))}</button>` : `<div class="mut">${esc(t('mustVerifyFirst'))}</div>`}
+        <label>${esc(t('reason'))}</label><input id="r-${+x.claim_id}" type="text">
+        <button class="btn bad" onclick="doHand(${+x.claim_id},false)">${esc(t('refuse'))}</button>
+        <button class="btn alt sm" onclick="reportProblem(${+x.id})">${esc(t('reportProblem'))}</button>`;
+    }
+    return `<div class="card ${catCls(x.category)}">${chead(x.category, `${x.donor} · ${x.quantity} ${t('packs')}`, `<span class="badge">${esc(t(x.status))}</span>`)}${stagesBar(claimStages(x))}${body}<button class="btn alt sm" onclick="openPassport(${+x.id})">${esc(t('passport'))}</button></div>`;
+  };
+  $('#view').innerHTML = d.items.length ? d.items.map(card).join('') : `<div class="card">${esc(t('nothing'))}</div>`;
+}
+window.doHand = guard(async (id, ok) => {
+  const body = ok ? {accepted: true, accepted_quantity: +document.getElementById('q-' + id).value} : {accepted: false, reason: document.getElementById('r-' + id).value};
+  await api(`/claims/${id}/handover`, {method: 'POST', body}); toast(t('handedOk')); show();
+});
+
+async function viewApprove() {
+  const orgs = (await api('/orgs')).filter(o => o.role !== 'admin');
+  const pend = orgs.filter(o => !o.verified), ok = orgs.filter(o => o.verified);
+  const row = (o, btn) => `<div class="card"><div class="row"><div><b>${esc(o.name)}</b><div class="mut">${esc(t('roleLbl_' + o.role))} · ${esc(o.username)}</div></div>${btn ? `<button class="btn sm" onclick="doApprove(${+o.id})">${esc(t('approve'))}</button>` : ''}</div></div>`;
+  $('#view').innerHTML = `<h2>${esc(t('pendingList'))}</h2>${pend.map(o => row(o, true)).join('') || `<div class="card">${esc(t('noPending'))}</div>`}<h2>${esc(t('verifiedList'))}</h2>${ok.map(o => row(o, false)).join('') || `<div class="card">${esc(t('nothing'))}</div>`}`;
+}
+window.doApprove = guard(async id => { await api(`/orgs/${id}/verify`, {method: 'POST'}); show(); });
+
+async function viewProof() {
+  const i = await api('/impact/detail');
+  const tile = (n, k) => `<div class="tile"><b>${n == null ? '—' : esc(n)}</b>${esc(t(k))}</div>`;
+  const kv = o => Object.entries(o).map(([k, v]) => `<tr><td>${esc(t('why_' + k) !== 'why_' + k ? t('why_' + k) : pretty(k))}</td><td>${+v}</td></tr>`).join('');
+  const cats = Object.entries(i.by_category).map(([c, v]) => `<tr><td>${esc(catName(c))}</td><td>${+v.listed}</td><td>${+v.collected}</td><td>${+v.uncollected}</td></tr>`).join('');
+  $('#view').innerHTML = `<div class="tiles">${tile(+i.listed_units, 'listed')}${tile(+i.collected_units, 'collected')}${tile(+i.uncollected_units, 'uncollected')}${tile(+i.handovers_completed, 'done')}${tile(+i.handovers_refused, 'refused')}${tile(+i.incidents_reported, 'incidentsTile')}
+    ${tile(i.completion_rate_pct == null ? null : i.completion_rate_pct + '%', 'pCompletion')}${tile(i.avg_minutes_listing_to_collection, 'pToCollect')}${tile(i.avg_minutes_listing_to_first_claim, 'pToClaim')}${tile(+i.claims_lapsed, 'pLapsed')}</div>
+    <div class="card"><h2>${esc(t('pReasons'))}</h2><table class="tbl">${kv(i.failure_reasons) || `<tr><td>${esc(t('pNone'))}</td></tr>`}</table>
+      ${Object.keys(i.refusal_reasons).length ? `<h2>${esc(t('pRefusal'))}</h2><table class="tbl">${kv(i.refusal_reasons)}</table>` : ''}</div>
+    <div class="card"><h2>${esc(t('pCategory'))}</h2><table class="tbl"><tr><th></th><th>${esc(t('listed'))}</th><th>${esc(t('collected'))}</th><th>${esc(t('uncollected'))}</th></tr>${cats || `<tr><td>${esc(t('pNone'))}</td></tr>`}</table></div>
+    <div class="card"><h2>${esc(t('pPeople'))}</h2><div class="mut">${+i.participants.donors} ${esc(t('pDonors'))} · ${+i.participants.recipients} ${esc(t('pRecips'))} · ${+i.participants.recipients_with_completed_handover} ${esc(t('pActive'))}</div></div>
+    <div class="card"><a class="link" href="/simulator.html">${esc(t('simLink'))}</a></div>
+    <div class="card"><button class="btn" id="vc">${esc(t('verify'))}</button><div id="vr" class="mut" style="margin-top:10px"></div><p class="mut">${esc(t('proofNote'))}</p><p class="mut">${esc(t('methodNote'))}</p></div>`;
+  $('#vc').onclick = guard(async () => {
+    const v = await api('/audit/verify');
+    $('#vr').innerHTML = v.ok ? `<span class="ok">✔ ${esc(t('chainOk'))}</span> · ${+v.checked} ${esc(t('checked'))}<br>${esc(v.head || '').slice(0, 16)}…`
+      : `<span class="bad">✖ ${esc(t('chainBad'))} #${+v.broken_at_event_id}</span>`;
+  });
+}
+
+function viewPickup() {
+  const canScan = 'BarcodeDetector' in window && navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
+  $('#view').innerHTML = `<div class="card"><h2>${esc(t('verifyPickupTitle'))}</h2>
+    <label>${esc(t('enterCode'))}</label><input id="p-code" autocapitalize="characters" autocomplete="off" placeholder="FB-12-abcdef123456">
+    <button class="btn" id="p-go">${esc(t('verifyBtn'))}</button>
+    ${canScan ? `<button class="btn alt" id="p-scan">${esc(t('scan'))}</button>` : `<div class="mut">${esc(t('scanUnsupported'))}</div>`}
+    <video id="p-vid" playsinline muted hidden style="width:100%;border-radius:10px;margin-top:8px"></video><div id="p-out" style="margin-top:10px"></div></div>`;
+  const go = guard(async () => {
+    const r = await api('/pickups/verify', {method: 'POST', body: {code: $('#p-code').value}});
+    $('#p-out').innerHTML = `<div class="ok">✔ ${esc(t('verifiedMsg'))}</div><div class="mut">${esc(r.recipient)} · ${esc(catName(r.category))} · ${+r.quantity}</div>`;
+    $('#p-code').value = '';
+  });
+  $('#p-go').onclick = go;
+  if (canScan) $('#p-scan').onclick = guard(async () => {
+    const vid = $('#p-vid'), stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
+    const det = new BarcodeDetector({formats: ['qr_code']});
+    vid.srcObject = stream; vid.hidden = false; await vid.play();
+    const stop = () => { clearInterval(timer); stream.getTracks().forEach(tr => tr.stop()); vid.hidden = true; };
+    S.stopScan = stop;
+    const timer = setInterval(async () => {
+      try { const f = await det.detect(vid); if (f.length) { stop(); S.stopScan = null; $('#p-code').value = f[0].rawValue; go(); } } catch (e) {}
+    }, 400);
+  });
+}
+
+window.reportProblem = guard(async id => {
+  const note = window.prompt(t('problemPrompt'));
+  if (!note || note.trim().length < 3) return;
+  await api(`/donations/${id}/incident`, {method: 'POST', body: {note: note.trim()}});
+  toast(t('reportedOk')); show();
+});
+
+async function viewIncidents() {
+  const list = await api('/incidents');
+  $('#view').innerHTML = list.length ? list.map(i => `<div class="card ${catCls(i.category)}">${chead(i.category, `${+i.quantity} ${t('packs')}`, `<span class="badge">${esc(t(i.status))}${i.resolution ? ' · ' + esc(t(i.resolution)) : ''}</span>`)}
+    <div class="mut">${esc(t('reporter'))}: ${esc(i.reporter)} · ${esc(i.donor)} · ${esc(stat(i.donation_status))}</div><p>${esc(i.note)}</p>
+    ${i.status === 'open' ? `<button class="btn alt sm" onclick="doResolve(${+i.id},'release')">${esc(t('release'))}</button> <button class="btn bad sm" onclick="doResolve(${+i.id},'discard')">${esc(t('discard'))}</button>` : ''}</div>`).join('')
+    : `<div class="card">${esc(t('noIncidents'))}</div>`;
+}
+window.doResolve = guard(async (id, decision) => {
+  const note = window.prompt(t('resolveNote')) || '';
+  await api(`/incidents/${id}/resolve`, {method: 'POST', body: {decision, note}}); toast(t('resolvedOk')); show();
+});
+
+async function viewFairness() {
+  const f = await api('/fairness');
+  $('#view').innerHTML = (f.concentration_warning ? `<div class="card warn">${esc(t('concentration'))}</div>` : '')
+    + f.rows.map(r => `<div class="card"><b>${esc(r.name)}</b><div class="mut">${esc(t('fOffers'))} ${+r.offers} · ${esc(t('fClaims'))} ${+r.claims} · ${esc(t('fDone'))} ${+r.completed} · ${esc(t('fExpired'))} ${+r.expired} · ${esc(t('fRefused'))} ${+r.refused}</div>
+      <div class="mut">${esc(t('fUnits'))}: <b>${+r.collected_units}</b> · ${esc(t('fShare'))}: <b>${r.share_pct == null ? '—' : +r.share_pct + '%'}</b></div></div>`).join('')
+    + `<p class="mut">${esc(t('fairNote'))}</p>`;
+}
+
+
+// ---------- v0.7 stuff: stages, speech, offline mode ----------
+const stagesBar = st => `<div class="stages">${st.map(x => `<div class="stg ${esc(x.state)}">${x.state === 'done' ? '✓ ' : x.state === 'failed' ? '✕ ' : ''}${esc(t('stg_' + x.key))}</div>`).join('')}</div>`;
+const riskPills = rs => (rs || []).map(r => `<span class="pill red">⚠ ${esc(t('risk_' + r))}</span>`).join('');
+function claimStages(x) {   // simple progress bar for the recipient's own claim
+  const done = x.status === 'completed';
+  return [{key: 'listed', state: 'done'}, {key: 'offered', state: 'skipped'}, {key: 'claimed', state: 'done'},
+    {key: 'pickup', state: x.picked_up || done ? 'done' : (x.status === 'reserved' ? 'current' : 'pending')},
+    {key: 'handover', state: done ? 'done' : (x.status === 'rejected' ? 'failed' : 'pending')}];
+}
+function speak(text) {
+  if (!('speechSynthesis' in window)) return toast(t('noVoice'), true);
+  const lang = S.lang === 'ta' ? 'ta-IN' : 'en-IN', u = new SpeechSynthesisUtterance(text);
+  u.lang = lang; const v = speechSynthesis.getVoices().find(v => v.lang && v.lang.toLowerCase().startsWith(lang.slice(0, 2)));
+  if (v) u.voice = v; else if (speechSynthesis.getVoices().length) return toast(t('noVoice'), true);
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+const expl = (reasons, en) => S.lang === 'ta' && reasons && reasons.length ? t('explainLead') + ' ' + reasons.map(c => t('rs_' + c)).join(', ') + '. ' + t('explainNote') : en;
+const storName = s => t('stor_' + s) !== 'stor_' + s ? t('stor_' + s) : pretty(s);
+const catName = c => t('cat_' + c) !== 'cat_' + c ? t('cat_' + c) : pretty(c);
+
+// ---------- look and feel: food pictures, the big hero part ----------
+const ART_BAKERY = '<svg class="ico"><use href="#i-bread"/></svg>';
+const ART_MEAL = '<svg class="ico"><use href="#i-rice"/></svg>';
+const ART_PRODUCE = '<svg class="ico"><use href="#i-carrot"/></svg>';
+const ART_OTHER = '<svg class="ico"><use href="#i-milk"/></svg>';
+const CATS = {packaged_bakery: ['bakery', ART_BAKERY], cooked_meal: ['meal', ART_MEAL], fresh_produce: ['produce', ART_PRODUCE]};
+const catCls = c => 'c-' + (CATS[c] ? CATS[c][0] : 'other');
+const catArt = c => `<span class="cat-art" aria-hidden="true">${CATS[c] ? CATS[c][1] : ART_OTHER}</span>`;
+const qtyChip = (n, sub) => `<div class="qty"><b>${+n}</b><span>${esc(sub || t('packs'))}</span></div>`;
+const chead = (c, sub, right) => `<div class="chead">${catArt(c)}<div class="ctext"><div class="ctitle">${esc(catName(c))}</div>${sub ? `<div class="mut">${esc(sub)}</div>` : ''}</div>${right || ''}</div>`;
+
+window.readAloud = (qty, cat, donor, eta, mins) => speak(S.lang === 'ta'
+  ? `${qty} பொதிகள், ${catName(cat)}. ${donor}. ${Math.round(eta)} நிமிடத்தில் அங்கு செல்லலாம். மீதம் ${Math.max(0, Math.round(mins))} நிமிடம்.`
+  : `${qty} packs of ${catName(cat)} from ${donor}. About ${Math.round(eta)} minutes away. ${Math.max(0, Math.round(mins))} minutes left.`);
+const mm = iso => Math.round((new Date(iso).getTime() - (Date.now() + S.offset)) / 60000);
+const fmt = iso => iso ? new Date(iso).toLocaleString(S.lang === 'ta' ? 'ta-IN' : [], {hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short'}) : '—';
+
+function updateNet() {
+  const el = $('#net'), off = !navigator.onLine || (S.lastFail && S.lastFail > (S.lastOk || 0));
+  el.hidden = !(off && S.me);
+  if (!el.hidden) el.textContent = `${t('offlineBanner')} ${S.lastOk ? new Date(S.lastOk).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '—'}. ${t('offlineNote')}`;
+}
+setInterval(updateNet, 3000); window.addEventListener('offline', updateNet);
+function pendingGet() { try { return JSON.parse(localStorage.getItem('fb_pending') || 'null'); } catch (e) { return null; } }
+function pendingSet(v) { store('fb_pending', v ? JSON.stringify(v) : null); }
+async function sendPending(quiet) {   // the server checks the safe window again, so offline data can never bring an expired listing back to life
+  const p = pendingGet(); if (!p || !S.me || S.me.role !== 'donor') return;
+  try { await api('/donations', {method: 'POST', body: p}); pendingSet(null); store('fb_draft', null); toast(t('sentOk')); if (S.tab === 'new' || S.tab === 'mine') { S.tab = 'mine'; show(); } }
+  catch (e) { if (e.offline) { S.lastFail = Date.now(); if (!quiet) toast(e.message, true); return; } pendingSet(null); toast(/closed|window/i.test(e.raw || e.message) ? t('droppedStale') : e.message, true); }
+}
+window.addEventListener('online', () => { S.lastFail = 0; updateNet(); sendPending(true); });
+
+async function viewLive() {
+  const d = await api('/live'); sync(d);
+  $('#view').innerHTML = `<p class="mut">${esc(t('liveNote'))}</p>` + (d.items.length ? d.items.map(x => `<div class="card ${catCls(x.category)}">
+    ${chead(x.category, `${x.donor} · ${+x.quantity} ${t('packs')}`, `<span class="badge">${esc(stat(x.status))}</span>`)}${stagesBar(x.stages)}
+    ${['published', 'reserved'].includes(x.status) ? clock(x.latest_collect) : ''}
+    ${x.claim_expires_at ? clock(x.claim_expires_at, t('claimExpires')) : ''}${riskPills(x.risks)}
+    <div class="mut">${+x.offers_made} ${esc(t('offersMade'))} · ${+x.claims_lapsed} ${esc(t('claimsLapsed'))}</div>
+    ${x.outcome.result !== 'in_progress' ? `<div class="${x.outcome.result === 'success' ? 'ok' : x.outcome.result === 'failed' ? 'bad' : ''}">${esc(t('out_' + x.outcome.result))}: ${esc(t('why_' + x.outcome.reason_code))}${x.outcome.reason_code === 'NO_TAKER_BEFORE_DEADLINE' ? ' (' + +x.offers_made + ' ' + esc(t('offersMade')) + ', ' + +x.claims_lapsed + ' ' + esc(t('claimsLapsed')) + ')' : (x.outcome.detail ? ' (' + esc(x.outcome.detail) + ')' : '')}</div>` : ''}
+    <button class="btn alt sm" onclick="openPassport(${+x.id})">${esc(t('passport'))}</button></div>`).join('') : `<div class="card">${esc(t('nothing'))}</div>`);
+}
+window.openPassport = id => { S.pid = id; S.prevTab = S.tab === 'passport' ? S.prevTab : S.tab; S.tab = 'passport'; show(); };
+
+async function viewPassport() {
+  const p = await api(`/donations/${+S.pid}/passport`), f = p.food;
+  const hist = p.handling_history.map(h => `<div><b>${esc(fmt(h.at))}</b> · ${esc(t('ev_' + h.type))}${h.detail.quantity ? ' · ' + +h.detail.quantity : ''}${h.detail.accepted_quantity ? ' · ' + +h.detail.accepted_quantity : ''}${h.detail.reason ? ' · “' + esc(h.detail.reason) + '”' : ''} <span class="mut">#${esc(h.hash)}</span></div>`).join('');
+  $('#view').innerHTML = `<button class="btn alt sm noprint" onclick="S.tab=S.prevTab||'mine';show()">← ${esc(t('back'))}</button>
+    <div class="card"><div class="row"><h2>${esc(t('passTitle'))}</h2><span class="badge">${esc(p.passport_ref)}</span></div>
+    <div class="mut">${esc(t('passDonor'))}: <b>${esc(p.donor)}</b> · ${esc(stat(p.status))}</div>${stagesBar(p.timeline.stages)}
+    <h2>${esc(t('passFood'))}</h2><table class="tbl"><tr><td>${esc(t('fCategory'))}</td><td>${esc(catName(f.category))}</td></tr><tr><td>${esc(t('fStorage'))}</td><td>${esc(storName(f.storage))}</td></tr>
+    <tr><td>${esc(t('quantity'))}</td><td>${+f.quantity}</td></tr><tr><td>${esc(t('passPacked'))}</td><td>${esc(fmt(f.prepared_at))}</td></tr>
+    <tr><td>${esc(t('passDeadline'))}</td><td>${esc(fmt(f.donor_deadline))}</td></tr><tr><td>${esc(t('passLatest'))}</td><td>${esc(fmt(f.latest_collect))}</td></tr>
+    <tr><td>${esc(t('passDecl'))}</td><td>${esc(p.donor_declaration || t('passNone'))}</td></tr></table>
+    <h2>${esc(t('passHistory'))}</h2><div class="hist">${hist}</div>
+    ${p.incidents.length ? `<h2>${esc(t('passIncidents'))}</h2>${p.incidents.map(i => `<div class="mut">${esc(fmt(i.created_at))} · ${esc(t(i.status))}${i.resolution ? ' · ' + esc(t(i.resolution)) : ''}: ${esc(i.note)}</div>`).join('')}` : ''}
+    ${p.refusals.length ? `<h2>${esc(t('passRefusals'))}</h2>${p.refusals.map(r => `<div class="mut">${esc(fmt(r.at))}: ${esc(r.detail.reason || '')}</div>`).join('')}` : ''}
+    <div class="mut">${esc(t('passIntegrity'))}: ${p.record_integrity.chain_ok ? '<span class="ok">✔ ' + esc(t('chainOk')) + '</span>' : '<span class="bad">✖ ' + esc(t('chainBad')) + '</span>'} · ${+p.record_integrity.events_checked} ${esc(t('checked'))}</div>
+    <div class="qr">${p.qr_svg}</div><div class="mut center">${esc(t('passScan'))}</div>
+    <p class="mut">${esc(t('passDisclaimer'))}</p><button class="btn alt noprint" onclick="window.print()">${esc(t('print'))}</button></div>`;
+}
+
+async function viewRoute() {
+  if (!S.me.verified) { $('#view').innerHTML = ''; return; }
+  const cap = S.vcap != null && S.vcap !== '' ? '?vehicle_capacity=' + encodeURIComponent(S.vcap) : '';
+  const p = await api('/planner' + cap); sync(p);
+  if (S.vcap == null) S.vcap = p.vehicle_capacity;
+  const stop = (x, i) => `<div class="card ${catCls(x.category)}"><div class="stop"><div class="n">${i + 1}</div><div style="flex:1">
+    ${chead(x.category, x.donor, qtyChip(x.quantity))}
+    <div class="mut">${+x.leg_min} ${esc(t('legMin'))} · ${esc(t('arriveIn'))} ${+x.arrive_in_min} ${esc(t('minWord'))} · ${+x.slack_min} ${esc(t('minWord'))} ${esc(t('slack'))} · Σ ${+x.cumulative_units}</div>
+    ${x.urgent ? `<span class="pill red">⏱ ${esc(t('urgent'))}</span>` : ''}${x.only_you ? `<span class="pill">★ ${esc(t('onlyYou'))}</span>` : ''}${x.claimed ? `<span class="pill green">✔ ${esc(t('claimedAlready'))}</span>` : ''}
+    ${clock(x.deadline)}
+    ${i === 0 && !x.claimed ? `<button class="btn claim" onclick="doClaim(${+x.donation_id})">${esc(t('claimNext'))}</button>` : ''}
+    <button class="btn alt sm" onclick="readAloud(${+x.quantity},'${esc(x.category)}',${esc(JSON.stringify(x.donor)).replace(/&quot;/g, '&#34;')},${+x.leg_min},${+x.slack_min + +x.leg_min})">🔊 ${esc(t('rd'))}</button></div></div></div>`;
+  $('#view').innerHTML = `<div class="card"><h2>${esc(t('planTitle'))}</h2><label>${esc(t('vehicleCap'))}</label>
+    <input id="pl-cap" type="number" min="0" inputmode="numeric" value="${+p.vehicle_capacity}"><button class="btn alt" id="pl-go">${esc(t('replan'))}</button>
+    ${p.stops.length ? `<div class="tiles" style="margin-top:10px"><div class="tile"><b>${+p.total_units}</b>${esc(t('planUnits'))}</div><div class="tile"><b>${+p.total_minutes}</b>${esc(t('planMins'))}</div></div>` : ''}
+    <p class="mut">${esc(t('claimTip'))}</p></div>`
+    + (p.stops.length ? p.stops.map(stop).join('') : `<div class="card">${esc(t('noPlan'))}</div>`)
+    + (p.backup ? `<div class="card"><b>${esc(t('backupPlan'))}</b><div class="mut">${p.backup.stops.map(b => esc(b.donor) + ' (' + +b.quantity + ')').join(' → ')} · ${+p.backup.total_units}</div></div>` : '')
+    + (p.skipped.length ? `<div class="card"><b>${esc(t('skippedTitle'))}</b><ul>${p.skipped.map(x => `<li>${esc(x.donor)} (${+x.quantity}): ${esc(t('sk_' + x.reason))}</li>`).join('')}</ul></div>` : '')
+    + `<p class="mut">${esc(t('assumptions'))}: ${esc(t('assumpText').replace('{v}', +p.assumptions.speed_kmph).replace('{m}', +p.assumptions.handling_min_per_stop))}</p>`;
+  $('#pl-go').onclick = () => { S.vcap = $('#pl-cap').value; show(); };
+}
+
+
+const HOME_HTML = "\n<section class=\"hero\">\n <span class=\"fl\" style=\"left:6%;top:20%\"><svg class=\"ico\"><use href=\"#i-bread\"/></svg></span><span class=\"fl\" style=\"right:8%;top:14%;animation-delay:-2s\"><svg class=\"ico\"><use href=\"#i-carrot\"/></svg></span>\n <span class=\"fl\" style=\"left:14%;bottom:14%;animation-delay:-4s\"><svg class=\"ico\"><use href=\"#i-apple\"/></svg></span><span class=\"fl\" style=\"right:15%;bottom:20%;animation-delay:-1s\"><svg class=\"ico\"><use href=\"#i-milk\"/></svg></span>\n <span class=\"fl x\" style=\"left:38%;top:6%;animation-delay:-3s\"><svg class=\"ico\"><use href=\"#i-banana\"/></svg></span><span class=\"fl x\" style=\"right:34%;bottom:6%;animation-delay:-5s\"><svg class=\"ico\"><use href=\"#i-rice\"/></svg></span><span class=\"fl x\" style=\"left:28%;bottom:4%;animation-delay:-2.5s\"><svg class=\"ico\"><use href=\"#i-tomato\"/></svg></span><span class=\"fl x\" style=\"right:3%;top:48%;animation-delay:-4.5s\"><svg class=\"ico\"><use href=\"#i-cake\"/></svg></span>\n <h1>Turn today's surplus<br>into someone's meal</h1>\n <p>FoodBridge connects bakeries, hotels and shops with orphanages, foundations and community kitchens, so good food reaches people before it reaches the bin.</p>\n <a class=\"btn or big pulse\" href=\"#\" data-go=\"register\">\ud83d\ude80 Get started</a>\n <div class=\"hint\" style=\"margin-top:26px\">Scroll down and watch the bowl fill \u2193</div>\n</section>\n<svg class=\"wave\" viewBox=\"0 0 1440 60\" preserveAspectRatio=\"none\"><path d=\"M0 0H1440V20C1200 70 960 0 720 25S240 70 0 20Z\" fill=\"#0e6b5c\" opacity=\".0\"/></svg>\n\n<section id=\"story\"><div class=\"sticky\">\n <h2>Every scroll rescues one more meal \ud83c\udf7d\ufe0f</h2>\n <div id=\"stage\">\n  <div class=\"fd\"><svg class=\"ico\"><use href=\"#i-bread\"/></svg></div><div class=\"fd\"><svg class=\"ico\"><use href=\"#i-carrot\"/></svg></div><div class=\"fd\"><svg class=\"ico\"><use href=\"#i-apple\"/></svg></div><div class=\"fd\"><svg class=\"ico\"><use href=\"#i-rice\"/></svg></div><div class=\"fd\"><svg class=\"ico\"><use href=\"#i-milk\"/></svg></div><div class=\"fd\"><svg class=\"ico\"><use href=\"#i-banana\"/></svg></div><div class=\"fd\"><svg class=\"ico\"><use href=\"#i-cake\"/></svg></div><div class=\"fd\"><svg class=\"ico\"><use href=\"#i-tomato\"/></svg></div><div class=\"fd\"><svg class=\"ico\"><use href=\"#i-orange\"/></svg></div>\n  <svg class=\"bowl bb\" viewBox=\"0 0 400 262\" aria-hidden=\"true\"><ellipse cx=\"200\" cy=\"120\" rx=\"150\" ry=\"34\" fill=\"#7a3210\"/><ellipse cx=\"200\" cy=\"118\" rx=\"140\" ry=\"28\" fill=\"#a24818\"/></svg>\n  <svg class=\"bowl bf\" viewBox=\"0 0 400 262\" aria-hidden=\"true\">\n   <defs><linearGradient id=\"bg\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop offset=\"0\" stop-color=\"#ffb23f\"/><stop offset=\".55\" stop-color=\"#ff8a1f\"/><stop offset=\"1\" stop-color=\"#e0560a\"/></linearGradient></defs>\n   <rect x=\"140\" y=\"244\" width=\"120\" height=\"14\" rx=\"7\" fill=\"#b8420a\"/>\n   <path d=\"M50 120 Q55 250 200 250 Q345 250 350 120 Q200 168 50 120Z\" fill=\"url(#bg)\"/>\n   <path d=\"M50 120 Q200 168 350 120\" fill=\"none\" stroke=\"#ffe0b8\" stroke-width=\"5\" stroke-linecap=\"round\"/>\n   <path d=\"M95 165 Q130 215 200 222\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\".35\" stroke-width=\"8\" stroke-linecap=\"round\"/>\n   <text x=\"200\" y=\"215\" text-anchor=\"middle\" font-size=\"26\" font-weight=\"900\" fill=\"#fff\" fill-opacity=\".9\" font-family=\"system-ui\">FOODBRIDGE</text>\n  </svg>\n </div>\n <div class=\"bcap\"><b id=\"bcount\">0</b> of 9 rescued \u00b7 <span id=\"bcap\">Surplus food is waiting\u2026</span></div>\n</div></section>\n\n<section class=\"sec\">\n <h2 class=\"rv\">How FoodBridge works</h2>\n <div class=\"grid\">\n  <div class=\"card step rv tilt\"><span class=\"num\">1</span><div class=\"ic\">\ud83d\udcdd</div><h3>List</h3><p class=\"muted\">A donor lists the food type, storage, quantity and packing time. The Safe-Window Clock sets the latest pickup time.</p></div>\n  <div class=\"card step rv d1 tilt\"><span class=\"num\">2</span><div class=\"ic\">\ud83e\udde0</div><h3>Match</h3><p class=\"muted\">Matching removes recipients who cannot take it, then ranks the rest by distance and fairness. The best match gets first dibs.</p></div>\n  <div class=\"card step rv d2 tilt\"><span class=\"num\">3</span><div class=\"ic\">\ud83e\udd1d</div><h3>Claim</h3><p class=\"muted\">One tap to claim. If first dibs goes unused, the next recipient is offered it automatically.</p></div>\n  <div class=\"card step rv d3 tilt\"><span class=\"num\">4</span><div class=\"ic\">\ud83d\udcf1</div><h3>Pick up</h3><p class=\"muted\">The recipient shows a QR code, the donor verifies it, the recipient inspects and accepts. Every step is logged.</p></div>\n </div>\n</section>\n\n<div class=\"marq\" aria-hidden=\"true\"><div><svg class=\"ico\"><use href=\"#i-bread\"/></svg><svg class=\"ico\"><use href=\"#i-carrot\"/></svg><svg class=\"ico\"><use href=\"#i-apple\"/></svg><svg class=\"ico\"><use href=\"#i-rice\"/></svg><svg class=\"ico\"><use href=\"#i-milk\"/></svg><svg class=\"ico\"><use href=\"#i-banana\"/></svg><svg class=\"ico\"><use href=\"#i-cake\"/></svg><svg class=\"ico\"><use href=\"#i-tomato\"/></svg><svg class=\"ico\"><use href=\"#i-orange\"/></svg><svg class=\"ico\"><use href=\"#i-bread\"/></svg><svg class=\"ico\"><use href=\"#i-carrot\"/></svg><svg class=\"ico\"><use href=\"#i-apple\"/></svg><svg class=\"ico\"><use href=\"#i-rice\"/></svg><svg class=\"ico\"><use href=\"#i-milk\"/></svg><svg class=\"ico\"><use href=\"#i-banana\"/></svg><svg class=\"ico\"><use href=\"#i-cake\"/></svg><svg class=\"ico\"><use href=\"#i-tomato\"/></svg><svg class=\"ico\"><use href=\"#i-orange\"/></svg><svg class=\"ico\"><use href=\"#i-bread\"/></svg><svg class=\"ico\"><use href=\"#i-carrot\"/></svg><svg class=\"ico\"><use href=\"#i-apple\"/></svg><svg class=\"ico\"><use href=\"#i-rice\"/></svg><svg class=\"ico\"><use href=\"#i-milk\"/></svg><svg class=\"ico\"><use href=\"#i-banana\"/></svg><svg class=\"ico\"><use href=\"#i-cake\"/></svg><svg class=\"ico\"><use href=\"#i-tomato\"/></svg><svg class=\"ico\"><use href=\"#i-orange\"/></svg><svg class=\"ico\"><use href=\"#i-bread\"/></svg><svg class=\"ico\"><use href=\"#i-carrot\"/></svg><svg class=\"ico\"><use href=\"#i-apple\"/></svg><svg class=\"ico\"><use href=\"#i-rice\"/></svg><svg class=\"ico\"><use href=\"#i-milk\"/></svg><svg class=\"ico\"><use href=\"#i-banana\"/></svg><svg class=\"ico\"><use href=\"#i-cake\"/></svg><svg class=\"ico\"><use href=\"#i-tomato\"/></svg><svg class=\"ico\"><use href=\"#i-orange\"/></svg><svg class=\"ico\"><use href=\"#i-bread\"/></svg><svg class=\"ico\"><use href=\"#i-carrot\"/></svg><svg class=\"ico\"><use href=\"#i-apple\"/></svg><svg class=\"ico\"><use href=\"#i-rice\"/></svg><svg class=\"ico\"><use href=\"#i-milk\"/></svg><svg class=\"ico\"><use href=\"#i-banana\"/></svg><svg class=\"ico\"><use href=\"#i-cake\"/></svg><svg class=\"ico\"><use href=\"#i-tomato\"/></svg><svg class=\"ico\"><use href=\"#i-orange\"/></svg><svg class=\"ico\"><use href=\"#i-bread\"/></svg><svg class=\"ico\"><use href=\"#i-carrot\"/></svg><svg class=\"ico\"><use href=\"#i-apple\"/></svg><svg class=\"ico\"><use href=\"#i-rice\"/></svg><svg class=\"ico\"><use href=\"#i-milk\"/></svg><svg class=\"ico\"><use href=\"#i-banana\"/></svg><svg class=\"ico\"><use href=\"#i-cake\"/></svg><svg class=\"ico\"><use href=\"#i-tomato\"/></svg><svg class=\"ico\"><use href=\"#i-orange\"/></svg><svg class=\"ico\"><use href=\"#i-bread\"/></svg><svg class=\"ico\"><use href=\"#i-carrot\"/></svg><svg class=\"ico\"><use href=\"#i-apple\"/></svg><svg class=\"ico\"><use href=\"#i-rice\"/></svg><svg class=\"ico\"><use href=\"#i-milk\"/></svg><svg class=\"ico\"><use href=\"#i-banana\"/></svg><svg class=\"ico\"><use href=\"#i-cake\"/></svg><svg class=\"ico\"><use href=\"#i-tomato\"/></svg><svg class=\"ico\"><use href=\"#i-orange\"/></svg><svg class=\"ico\"><use href=\"#i-bread\"/></svg><svg class=\"ico\"><use href=\"#i-carrot\"/></svg><svg class=\"ico\"><use href=\"#i-apple\"/></svg><svg class=\"ico\"><use href=\"#i-rice\"/></svg><svg class=\"ico\"><use href=\"#i-milk\"/></svg><svg class=\"ico\"><use href=\"#i-banana\"/></svg><svg class=\"ico\"><use href=\"#i-cake\"/></svg><svg class=\"ico\"><use href=\"#i-tomato\"/></svg><svg class=\"ico\"><use href=\"#i-orange\"/></svg></div></div>\n\n<section class=\"sec\">\n <h2 class=\"rv\">The food waste problem</h2>\n <div class=\"grid\">\n  <div class=\"bigstat rv\" style=\"background:linear-gradient(135deg,#ff8a1f,#ffb23f)\"><b><span class=\"count\" data-to=\"1.05\" data-dec=\"2\">0</span> bn</b>tonnes of food wasted worldwide in 2022</div>\n  <div class=\"bigstat rv d1\" style=\"background:linear-gradient(135deg,#1b8a3a,#4ccf75)\"><b><span class=\"count\" data-to=\"19\">0</span>%</b>of food available to consumers was wasted</div>\n  <div class=\"bigstat rv d2\" style=\"background:linear-gradient(135deg,#ff4f8b,#ff8fb5)\"><b><span class=\"count\" data-to=\"783\">0</span> m</b>people faced hunger in the same period</div>\n  <div class=\"bigstat rv d3\" style=\"background:linear-gradient(135deg,#2b7de9,#6bb0ff)\"><b>~<span class=\"count\" data-to=\"60\">0</span>%</b>of that waste came from households</div>\n </div>\n <p class=\"muted small rv\" style=\"text-align:center\">Source: UNEP Food Waste Index Report 2024 (figures for 2022). Hunger figure as cited in UNEP's release.</p>\n <div class=\"card rv\" style=\"text-align:center\"><h3>Rescued on FoodBridge so far</h3>\n  <div class=\"grid sm\"><div><b class=\"time count\" data-to=\"0\" data-live=\"collected\">0</b><div class=\"muted\">units rescued</div></div>\n  <div><b class=\"time count\" data-to=\"0\" data-live=\"completed\">0</b><div class=\"muted\">pickups</div></div>\n  <div><b class=\"time count\" data-to=\"0\" data-live=\"donors\">0</b><div class=\"muted\">donors</div></div>\n  <div><b class=\"time count\" data-to=\"0\" data-live=\"recipients\">0</b><div class=\"muted\">recipients</div></div></div></div>\n</section>\n\n<section class=\"sec\">\n <h2 class=\"rv\">Join as\u2026</h2>\n <div class=\"grid\">\n  <div class=\"card role rv tilt\"><div class=\"big\">\ud83c\udfea</div><h3>Donor</h3><p class=\"muted\">Bakeries, hotels, shops and homes with extra food.</p></div>\n  <div class=\"card role rv d1 tilt\"><div class=\"big\">\ud83c\udfe0</div><h3>Recipient</h3><p class=\"muted\">Orphanages, foundations and shelters that serve meals.</p></div>\n </div>\n <div class=\"cta-band rv\"><h2 style=\"margin-top:0\">Ready to rescue food today?</h2>\n  <a class=\"btn big\" style=\"background:#fff;color:#e0560a\" href=\"#\" data-go=\"register\">\ud83c\udf08 Get started</a></div>\n</section>";
+window.initStory=function(){
+ var story=document.getElementById('story');if(!story)return;
+ var stage=document.getElementById('stage'),items=[].slice.call(stage.querySelectorAll('.fd')),bowls=[].slice.call(stage.querySelectorAll('.bowl')),
+     cnt=document.getElementById('bcount'),cap=document.getElementById('bcap');
+ var N=items.length,W,H,bw,bh,bl,bt,slots=[],starts=[],last=-1;
+ var CAPS=["Surplus food is waiting…","First loaf rescued 🍞","Fresh carrots on the way","Apples saved from the bin","Rice for a full plate","Milk saved from the bin","Bananas, still perfect","A cupcake joins in","Almost full…","A full bowl. A fed family. 💚"];
+ function measure(){W=stage.clientWidth;H=stage.clientHeight;bw=W*.86;bh=bw*.655;bl=(W-bw)/2;bt=H-bh;
+  for(var i=0;i<N;i++){var col=i%4,row=Math.floor(i/4);
+   slots[i]={x:bl+bw*(.2+col*.2+(row%2?.07:0)),y:bt+bh*(.45-row*.09)};
+   starts[i]={x:i%2?W+30:-70,y:H*(.04+((i*37)%30)/100)};}}
+ function place(p){var landed=0;
+  for(var i=0;i<N;i++){var a=i/N*.86,t=Math.min(1,Math.max(0,(p-a)/.14)),it=items[i],S=starts[i],E=slots[i];
+   if(t<=0){it.style.opacity=0;continue}
+   var cx=(S.x+E.x)/2,cy=Math.min(S.y,E.y)-H*.28,u=1-t;
+   var x=u*u*S.x+2*u*t*cx+t*t*E.x,y=u*u*S.y+2*u*t*cy+t*t*E.y;
+   it.style.opacity=1;it.style.transform='translate('+(x-24)+'px,'+(y-24)+'px) rotate('+(t*540)+'deg) scale('+(.7+.3*t)+')';
+   if(t>=1)landed++;}
+  if(landed!==last){last=landed;cnt.textContent=landed;cap.textContent=CAPS[Math.min(landed,CAPS.length-1)];
+   bowls.forEach(function(b){b.classList.remove('wob');void b.getBoundingClientRect();b.classList.add('wob')});}}
+ function onScroll(){if(!story.isConnected){removeEventListener("scroll",onScroll);return}var r=story.getBoundingClientRect(),total=story.offsetHeight-innerHeight+60;place(Math.min(1,Math.max(0,-r.top/total)));}
+ measure();onScroll();
+ addEventListener('scroll',onScroll,{passive:true});
+ addEventListener('resize',function(){measure();onScroll()});
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches){place(1);}
+};
+function authHead() { return S.mode === 'login' ? `<div class="page-title"><div class="big">🍞🥗🍛</div><h1>${esc(t('login'))}</h1></div>` : `<div class="page-title"><div class="big">🌈🍎🥖</div><h1>${esc(t('register'))}</h1></div>`; }
+function pageTitle() {
+  const r = S.me.role, vb = r === 'admin' ? '' : S.me.verified ? `<span class="vb y">✔ ${esc(t('verifiedB'))}</span>` : `<span class="vb n">⏳ ${esc(t('pendingB'))}</span>`;
+  return `<div class="page-title"><div class="big">${{donor: '🏪', recipient: '🏠', admin: '🛡️'}[r]}</div><h1>${esc(S.me.name)}</h1><div>${vb}</div></div><div class="strip" aria-hidden="true">${['bread', 'apple', 'carrot', 'rice', 'milk', 'banana'].map(n => `<svg class="ico"><use href="#i-${n}"/></svg>`).join('')}</div>`;
+}
+async function dashTiles(v, tab) {
+  if (tab !== 'mine' && tab !== 'feed') return;
+  const put = i => { if (S.tab !== tab || !v.isConnected || v.querySelector('.tiles')) return; const tl = (n, k) => `<div class="tile"><b>${+n}</b>${esc(t(k))}</div>`;
+    const s = v.querySelector('.strip'); if (s) s.insertAdjacentHTML('afterend', `<div class="tiles">${tl(i.listed_units, 'listed')}${tl(i.collected_units, 'collected')}${tl(i.handovers_completed, 'done')}${tl(i.handovers_refused, 'refused')}</div>`); };
+  if (S.tiles) put(S.tiles);
+  try { S.tiles = await api('/impact'); const old = v.querySelector('.tiles'); if (old) old.remove(); put(S.tiles); } catch (e) {}
+}
+function viewHome() {
+  const v = $('#view'); v.innerHTML = HOME_HTML;
+  v.querySelectorAll('[data-go]').forEach(a => a.onclick = e => { e.preventDefault(); S.mode = a.dataset.go; scrollTo(0, 0); show(); });
+  v.querySelectorAll('.btn.pulse, .cta-band .btn').forEach(b => { if (!b.dataset.go) b.dataset.go = 'register'; });
+  if (S.lang === 'ta') { v.querySelector('.hero h1').textContent = I18N.ta.heroH; v.querySelector('.hero p').textContent = I18N.ta.heroSub; }
+  v.querySelectorAll('.btn[data-go]').forEach(b => b.onclick = e => { e.preventDefault(); S.mode = b.dataset.go; scrollTo(0, 0); show(); });
+  api('/public/stats').then(d => v.querySelectorAll('[data-live]').forEach(e => { const n = +d[{collected: 'collected_units', completed: 'handovers_completed'}[e.dataset.live] || e.dataset.live] || 0; e.dataset.to = n; if (e.dataset.done) e.textContent = n; })).catch(() => {});
+  window.initStory();
+}
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(x => { if (!x.isIntersecting) return; x.target.classList.add('in'); x.target.querySelectorAll('.count').forEach(count); if (x.target.classList.contains('count')) count(x.target); io.unobserve(x.target); }), {threshold: .15}) : null;
+function count(e) { if (e.dataset.done) return; e.dataset.done = 1; const to = parseFloat(e.dataset.to), dec = +(e.dataset.dec || 0); let t0 = null;
+  const step = ts => { if (!t0) t0 = ts; const k = Math.min(1, (ts - t0) / 1600); e.textContent = (parseFloat(e.dataset.to) * (1 - Math.pow(1 - k, 3))).toFixed(dec); if (k < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); }
+function fxInit(root) {
+  root.querySelectorAll('.rv').forEach(e => io ? io.observe(e) : e.classList.add('in'));
+  root.querySelectorAll('.tilt').forEach(c => { c.onmousemove = e => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.style.transform = `perspective(700px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-3px)`; }; c.onmouseleave = () => c.style.transform = ''; });
+}
+function confetti() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; const em = ['🍞', '🥕', '🍎', '🍚', '🥛', '🍌', '🎉', '💚'];
+  for (let i = 0; i < 26; i++) { const c = document.createElement('div'); c.className = 'confetti'; c.textContent = em[i % em.length]; c.style.left = Math.random() * 100 + 'vw'; c.style.animationDuration = (2 + Math.random() * 2.2) + 's'; c.style.animationDelay = Math.random() * .6 + 's'; document.body.appendChild(c); setTimeout(() => c.remove(), 5000); }
+}
+async function boot() {
+  document.documentElement.lang = S.lang;
+  try { S.rules = await api('/rules'); } catch (e) { toast(e.message, true); }
+  if (S.token) { try { S.me = await api('/me'); S.tab = TABS[S.me.role][0][0]; } catch (e) { S.token = null; store('fb_token', null); } }
+  $('#lang').onclick = () => { S.lang = S.lang === 'en' ? 'ta' : 'en'; store('fb_lang', S.lang); document.documentElement.lang = S.lang; show(); };
+  setInterval(() => { if (S.tab === 'feed' && S.me && !document.hidden) show(); }, 15000);
+  setInterval(() => { if (S.tab === 'live' && S.me && !document.hidden) show(); }, 5000);
+  try { document.body.classList.toggle('big', localStorage.getItem('fb_big') === '1'); } catch (e) {}
+  $('#big').onclick = () => { const on = !document.body.classList.contains('big'); document.body.classList.toggle('big', on); store('fb_big', on ? '1' : null); };
+  const m = /^#passport\/(\d+)$/.exec(location.hash);
+  if (S.me && m) { S.pid = +m[1]; S.prevTab = S.tab; S.tab = 'passport'; }
+  if (S.me) sendPending(true);
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+  $('#burger').onclick = () => { const o = $('#nav').classList.toggle('open'); $('#burger').classList.toggle('x', o); $('#burger').setAttribute('aria-expanded', o); };
+  $('#brand').onclick = e => { e.preventDefault(); if (S.me) S.tab = TABS[S.me.role][0][0]; else S.mode = 'home'; closeMenu(); scrollTo(0, 0); show(); };
+  show();
+}
+boot();
+</script>
+</body>
+</html>

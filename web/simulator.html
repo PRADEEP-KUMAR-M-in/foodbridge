@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B6E4F">
+<link rel="icon" href="/icon.svg">
+<title>FOODBRIDGE what-if simulator</title>
+<style>
+:root{--bg:#F2F8EF;--card:#fff;--tx:#1B1A2E;--mut:#58566B;--bd:#DCE6D6;--g:#0B6E4F;--amb:#8A5300;--amb-bg:#FFF0CC;--red:#B3162B}
+@media (prefers-color-scheme:dark){:root{--bg:#101A12;--card:#18251A;--tx:#E6F0E6;--mut:#A5B3A5;--bd:#2B3D2D;--g:#66BB6A;--amb:#FFCC80;--amb-bg:#3A2E10;--red:#EF9A9A}}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Tamil",sans-serif;background:var(--bg);color:var(--tx)}
+header{background:#0B6E4F;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 12px}
+header a{color:#fff}
+main{max-width:860px;margin:0 auto;padding:12px 12px 40px}
+.banner{background:var(--amb-bg);color:var(--amb);border:1px solid var(--amb);border-radius:12px;padding:10px 12px;font-weight:600}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px;margin:12px 0}
+h1{font-size:20px;margin:0}h2{font-size:17px;margin:4px 0 8px}
+.mut{color:var(--mut);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+label{display:block;font-size:14px;font-weight:600}
+input{width:100%;padding:9px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font:inherit}
+button{margin-top:12px;padding:12px 18px;border:0;border-radius:12px;background:var(--g);color:#fff;font:inherit;font-weight:700}
+button[disabled]{opacity:.6}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:var(--g)}
+.wrap{overflow-x:auto}
+a{color:var(--g)}
+/* same look as the main app (borrowed from foodbridge-1.py) */
+:root{color-scheme:light;--bg:#fff7e6;--g:#1b8a3a;--bd:#dfe8df}
+body{background:linear-gradient(160deg,#fff7e6 0%,#e8fff0 45%,#e6f3ff 100%) fixed;min-height:100vh}
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:5;background:linear-gradient(90deg,#1b8a3a,#0e6b5c);box-shadow:0 3px 14px #0003}
+header h1{font-size:1.15rem;font-weight:900;letter-spacing:.5px}
+header a{font-weight:700;padding:7px 14px;border-radius:999px;background:#ffffff26;text-decoration:none}
+.card{border-radius:20px;border:1px solid #eef3ee;box-shadow:0 8px 24px #0f3d1a1c}
+.banner{border-radius:16px}
+input{border:2px solid #dfe8df;border-radius:12px}
+button{border-radius:14px;background:linear-gradient(135deg,#1b8a3a,#27b24f);box-shadow:0 4px 12px #1b8a3a55;font-weight:800}
+</style>
+</head>
+<body>
+<header><h1>FOODBRIDGE what-if simulator</h1><a href="/">&larr; back to the app</a></header>
+<main>
+<div class="banner">SIMULATION. Every number comes from the assumptions below, not from real donors or recipients. It shows what the design could do if those assumptions held; only a pilot can show what it really does.</div>
+<div class="card" id="login" hidden>Please <a href="/">log in to the app</a> first, then open this page again.</div>
+<div class="card" id="panel" hidden>
+  <h2>Assumptions you can change</h2>
+  <div class="grid">
+    <div><label for="p_respond">Chance a contacted organisation answers</label><input id="p_respond" type="number" step="0.05" min="0.05" max="1" value="0.7"></div>
+    <div><label for="median_delay_min">Median minutes to answer</label><input id="median_delay_min" type="number" step="1" min="1" max="120" value="20"></div>
+    <div><label for="p_noshow_mean">Average no-show chance after claiming</label><input id="p_noshow_mean" type="number" step="0.01" min="0" max="0.5" value="0.12"></div>
+    <div><label for="p_blind_yes">Says yes to a broadcast that does not fit them</label><input id="p_blind_yes" type="number" step="0.05" min="0" max="1" value="0.3"></div>
+    <div><label for="offer_window_min">First-dibs window (minutes)</label><input id="offer_window_min" type="number" step="1" min="1" max="30" value="2"></div>
+    <div><label for="recipients">Receiving organisations</label><input id="recipients" type="number" step="1" min="2" max="30" value="8"></div>
+    <div><label for="listings_per_day">Listings per day (all donors)</label><input id="listings_per_day" type="number" step="0.5" min="0.5" max="10" value="3"></div>
+    <div><label for="runs">Simulated weeks</label><input id="runs" type="number" step="10" min="10" max="200" value="100"></div>
+  </div>
+  <button id="go">Run simulation</button> <span class="mut" id="status"></span>
+</div>
+<div id="out"></div>
+<div class="card"><h2>How to read this</h2>
+<p class="mut">Each simulated week uses the same organisations and listings for every row, so rows are fairly compared. Numbers are the median over the simulated weeks, with the 5th to 95th percentile range in brackets. "Largest share" is the portion of all delivered food that went to a single organisation. The FOODBRIDGE rows use the app's real scoring code. Not modelled: donor effort, vehicles and drivers, app adoption, double-dispatch in today's process (which would favour FOODBRIDGE), and the faster listing from Speak-to-List.</p></div>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let token = null; try { token = localStorage.getItem('fb_token'); } catch (e) {}
+if (!token) $('#login').hidden = false; else $('#panel').hidden = false;
+const pct = m => `${Math.round(100 * m.median)}% <span class="mut">(${Math.round(100 * m.p5)}–${Math.round(100 * m.p95)})</span>`;
+const num = (m, d = 0) => m.median == null ? '—' : `${m.median.toFixed(d)} <span class="mut">(${m.p5.toFixed(d)}–${m.p95.toFixed(d)})</span>`;
+async function run() {
+  const body = {};
+  ['p_respond', 'median_delay_min', 'p_noshow_mean', 'p_blind_yes', 'offer_window_min', 'listings_per_day'].forEach(k => body[k] = parseFloat($('#' + k).value));
+  ['recipients', 'runs'].forEach(k => body[k] = parseInt($('#' + k).value, 10));
+  $('#go').disabled = true; $('#status').textContent = 'Running…';
+  try {
+    const r = await fetch('/api/simulate', {method: 'POST', headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + token}, body: JSON.stringify(body)});
+    const j = await r.json();
+    if (!r.ok) throw new Error(Array.isArray(j.detail) ? j.detail.map(x => x.loc.slice(-1) + ': ' + x.msg).join('; ') : (j.detail || r.statusText));
+    const rows = Object.values(j.scenarios).map(s => `<tr><td><b>${esc(s.label)}</b></td><td>${pct(s.completion)}<div class="bar"><i style="width:${Math.round(100 * s.completion.median)}%"></i></div></td><td>${num(s.median_time)}</td><td>${num(s.wasted_per_100, 1)}</td><td>${pct(s.top_share)}</td></tr>`).join('');
+    const p = j.paired;
+    $('#out').innerHTML = `<div class="card"><h2>Results (${+j.runs} simulated weeks)</h2><div class="wrap"><table>
+      <tr><th>Process</th><th>Share of listed food delivered</th><th>Minutes to a confirmed claim</th><th>Wasted trips per 100 listings</th><th>Largest organisation's share</th></tr>${rows}</table></div>
+      ${p ? `<p>Week by week, FOODBRIDGE delivered a higher share than today's process in <b>${+p.full_better}</b> weeks, the same in <b>${+p.tie}</b>, and a lower share in <b>${+p.full_worse}</b> (of ${+p.runs}).</p>` : ''}
+      <p class="mut">${esc(j.disclaimer)}</p></div>`;
+    $('#status').textContent = '';
+  } catch (e) { $('#status').textContent = e.message; }
+  $('#go').disabled = false;
+}
+$('#go').onclick = run;
+</script>
+</body>
+</html>

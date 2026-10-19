@@ -1,0 +1,12 @@
+{
+  "status": "EXAMPLE_PENDING_EXPERT_REVIEW",
+  "note": "Demo values only. Real max_hold_minutes MUST come from guidance reviewed by a qualified food-safety professional. A null value means the category is not accepted.",
+  "reviewed_by": null,
+  "reviewed_on": null,
+  "rules": [
+    {"category": "packaged_bakery", "storage": "ambient", "max_hold_minutes": 480},
+    {"category": "packaged_bakery", "storage": "chilled", "max_hold_minutes": 720},
+    {"category": "cooked_meal", "storage": "hot_held", "max_hold_minutes": 120},
+    {"category": "fresh_produce", "storage": "ambient", "max_hold_minutes": null}
+  ]
+}
